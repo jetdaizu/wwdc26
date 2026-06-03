@@ -6,11 +6,10 @@
 <title>WWDC Video Ops — 即時投稿ランブック</title>
 <style>
   :root{
-    --bg:#eef1f7; --panel:#fff; --ink:#1b2330; --sub:#69727f; --line:#e4e8f0; --line2:#eef1f6;
-    --brand:#2563eb; --brand-weak:#eaf1ff;
-    --todo:#9aa3af; --doing:#2563eb; --done:#16a34a; --blocked:#dc2626; --late:#d97706;
-    --ok:#16a34a; --warn:#d97706; --bad:#dc2626;
-    --shadow:0 1px 2px rgba(16,24,40,.04),0 4px 12px rgba(16,24,40,.06);
+    --bg:#f1e8d8; --panel:#fbf6ec; --ink:#4a4036; --sub:#8c7e6b; --line:#e6dcc6; --line2:#efe7d6;
+    --brand:#a87c4f; --brand-weak:#efe2cf;
+    --todo:#bdb29c; --doing:#c08a47; --done:#7f8a55; --late:#c0714f;
+    --shadow:0 1px 2px rgba(74,54,32,.05),0 4px 12px rgba(74,54,32,.07);
     --radius:14px;
   }
   *{box-sizing:border-box}
@@ -24,185 +23,145 @@
   input,select,textarea{font-family:inherit;font-size:13px;color:inherit}
 
   /* ---------- header ---------- */
-  header{background:var(--panel);border-bottom:1px solid var(--line);padding:9px 16px;display:flex;flex-wrap:wrap;gap:10px 18px;align-items:center}
+  header{background:linear-gradient(135deg,#e9dabb 0%,#e0caa4 60%,#d8c098 100%);border-bottom:1px solid #d3bd96;padding:9px 16px;display:flex;flex-wrap:wrap;gap:10px 18px;align-items:center;color:var(--ink)}
   .brand{display:flex;align-items:center;gap:9px}
   .brand .dot{width:10px;height:10px;border-radius:50%;background:var(--brand)}
-  .brand b{font-size:14.5px} .brand small{color:var(--sub);font-size:11px;display:block}
+  .brand b{font-size:14.5px} .brand small{color:#7c6c54;font-size:11px;display:block}
   .fld{display:flex;align-items:center;gap:6px}
-  .fld label{font-size:11px;color:var(--sub);white-space:nowrap}
-  .fld input{border:1px solid var(--line);border-radius:8px;padding:6px 8px;background:#fff}
+  .fld label{font-size:11px;color:#7c6c54;white-space:nowrap}
+  .fld input{border:1px solid #cdb78f;border-radius:8px;padding:6px 8px;background:#fffdf7}
   .fld input.name{min-width:150px}
-  .clock{margin-left:auto;text-align:right}
-  .clock .now{font-variant-numeric:tabular-nums;font-weight:800;font-size:15px}
-  .clock .el{font-variant-numeric:tabular-nums;font-weight:800;font-size:15px;color:var(--brand)}
-  .clock small{display:block;color:var(--sub);font-size:11px}
+  .btn-ghost{border:1px solid #c2a877;background:#fffdf7;color:var(--ink);border-radius:8px;padding:6px 10px;font-size:12.5px;font-weight:700}
+  .btn-ghost:hover{background:#fff}
+  .clocks{margin-left:auto;display:flex;gap:20px;align-items:flex-start}
+  .ck{text-align:right} .ck .lab{display:block;font-size:10px;color:#7c6c54;letter-spacing:.3px;margin-bottom:1px}
+  .ck .v{font-variant-numeric:tabular-nums;font-weight:800;font-size:15px}
+  .ck.elc .v{color:var(--brand)}
 
   /* ---------- toolbar ---------- */
-  .toolbar{display:flex;gap:8px;align-items:center;padding:8px 16px;background:var(--bg);border-bottom:1px solid var(--line);flex-wrap:wrap}
-  .btn{border:1px solid var(--line);background:#fff;border-radius:8px;padding:7px 11px;font-size:12.5px;font-weight:600;box-shadow:var(--shadow)}
-  .btn:hover{background:#fafbfc}
+  .toolbar{display:flex;gap:8px;align-items:center;padding:8px 16px;background:#ece0ca;border-bottom:1px solid var(--line);flex-wrap:wrap}
+  .btn{border:1px solid var(--line);background:var(--panel);border-radius:8px;padding:7px 11px;font-size:12.5px;font-weight:600;box-shadow:var(--shadow)}
+  .btn:hover{background:#fff}
   .btn.primary{background:var(--brand);color:#fff;border-color:var(--brand)}
-  .btn.warnbtn{color:var(--bad);border-color:#f0c8c8}
+  .btn.warnbtn{color:var(--late);border-color:#e3c3b3}
   .toolbar .spacer{flex:1}
-  .switch{display:flex;align-items:center;gap:6px;font-size:12px;color:var(--sub)}
   .progress{display:flex;align-items:center;gap:8px;font-size:12px;color:var(--sub)}
-  .progress .bar{width:130px;height:7px;border-radius:5px;background:#e7eaef;overflow:hidden}
+  .progress .bar{width:130px;height:7px;border-radius:5px;background:#ddd0b8;overflow:hidden}
   .progress .bar i{display:block;height:100%;background:var(--done);width:0%;transition:width .3s}
+  .syncchip{display:inline-flex;align-items:center;gap:6px;border:1px solid var(--line);background:var(--panel);border-radius:20px;padding:5px 11px;font-size:11.5px;font-weight:700;color:var(--sub);box-shadow:var(--shadow)}
+  .syncchip .d{width:8px;height:8px;border-radius:50%;background:#cbbfa6}
+  .syncchip.on .d{background:var(--done);box-shadow:0 0 0 3px #e3e6cf}
+  .syncchip.on{color:#5f6a3c}
 
-  /* ---------- escalation banner ---------- */
-  #alert{display:none;margin:10px 16px 0;border:1px solid #f4caca;background:#fff5f5;border-radius:var(--radius);padding:10px 14px}
-  #alert.show{display:block}
-  #alert .hd{display:flex;align-items:center;gap:8px;font-weight:800;color:var(--bad)}
-  #alert .hd .pill{background:var(--bad);color:#fff;border-radius:20px;font-size:11px;padding:2px 9px}
-  #alert ul{margin:8px 0 0;padding:0;list-style:none;display:flex;flex-direction:column;gap:6px}
-  #alert li{display:flex;gap:8px;align-items:center;font-size:12.5px}
-  #alert li .tag{font-size:10px;font-weight:800;border-radius:5px;padding:2px 6px;color:#fff}
-  #alert li .tag.blocked{background:var(--blocked)} #alert li .tag.late{background:var(--late)}
-  #alert li .go{margin-left:auto;border:1px solid #f0c0c0;background:#fff;color:var(--bad);border-radius:7px;padding:3px 9px;font-size:11.5px;font-weight:700}
+  /* ---------- board ---------- */
+  #board{flex:1;overflow:auto;padding:12px 16px 60px}
+  #timeline{max-width:1100px;margin:0 auto}
 
-  /* ---------- board / timeline ---------- */
-  #board{flex:1;overflow:auto;position:relative;padding:16px 16px 60px}
-  #timeline{position:relative;min-width:min-content}
-  svg#wires{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;overflow:visible;z-index:0}
-  svg#wires.hide{display:none}
+  .slothead{display:flex;align-items:center;gap:10px;margin:16px 0 8px;padding:6px 10px;border-radius:10px}
+  .slothead.current{background:var(--brand-weak)}
+  .slothead .tnode{width:11px;height:11px;border-radius:50%;background:#cbbfa6;flex:0 0 auto}
+  .slothead.current .tnode{background:var(--brand);box-shadow:0 0 0 4px #e6d3b6}
+  .slothead .tlab{font-size:10px;color:var(--sub);font-weight:700}
+  .slothead input.stime{width:62px;border:1px solid var(--line);border-radius:8px;padding:4px 6px;font-weight:800;font-size:15px;font-variant-numeric:tabular-nums;text-align:center;background:var(--panel)}
+  .slothead.current input.stime{border-color:var(--brand)}
+  .slothead .now{font-size:10.5px;font-weight:800;color:var(--brand);background:#fff;border:1px solid var(--brand);border-radius:20px;padding:1px 8px}
+  .slothead .sp{flex:1}
+  .slothead .sbtn{font-size:11.5px;font-weight:700;color:var(--sub);border:1px solid var(--line);background:var(--panel);border-radius:8px;padding:4px 9px}
+  .slothead .sbtn:hover{background:#fff;color:var(--ink)}
+  .slothead .sdel{color:#c2b59c} .slothead .sdel:hover{color:var(--late)}
 
-  .slot{display:flex;gap:14px;position:relative;z-index:1;padding-bottom:6px}
-  .slot .rail{flex:0 0 76px;position:relative;display:flex;flex-direction:column;align-items:center;padding-top:2px}
-  .slot .rail .time{font-variant-numeric:tabular-nums;font-weight:800;font-size:14px}
-  .slot .rail .time small{display:block;font-size:10px;color:var(--sub);font-weight:600;text-align:center}
-  .slot .rail .node{width:13px;height:13px;border-radius:50%;background:#cfd6e0;border:3px solid #fff;box-shadow:0 0 0 1px #cfd6e0;margin:5px 0}
-  .slot .rail .line{flex:1;width:2px;background:var(--line);min-height:18px}
-  .slot.current .rail .node{background:var(--brand);box-shadow:0 0 0 1px var(--brand),0 0 0 5px var(--brand-weak)}
-  .slot.current .rail .time{color:var(--brand)}
-  .slot:last-child .rail .line{display:none}
-  .slot .steps{flex:1;display:flex;gap:14px;flex-wrap:wrap;align-items:flex-start;padding-bottom:14px}
+  .slotcards{display:flex;flex-direction:column;gap:10px}
 
-  /* ---------- step card ---------- */
-  .card{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow);width:340px;flex:0 0 340px;position:relative;transition:box-shadow .14s,transform .14s}
-  .card:hover{box-shadow:0 8px 24px rgba(16,24,40,.12);transform:translateY(-1px)}
-  .card .hd{display:flex;align-items:flex-start;gap:9px;padding:11px 12px 9px;border-bottom:1px solid var(--line2)}
-  .card .chk{flex:0 0 auto;width:22px;height:22px;border:2px solid var(--line);border-radius:7px;display:grid;place-items:center;font-size:14px;color:#fff;background:#fff;margin-top:1px}
-  .card .chk.on{background:var(--done);border-color:var(--done)}
-  .card .htext{flex:1;min-width:0}
-  .card .idrow{display:flex;align-items:center;gap:7px;margin-bottom:3px}
-  .card .id{font-variant-numeric:tabular-nums;font-size:10.5px;font-weight:800;color:#fff;background:var(--ink);border-radius:5px;padding:1px 6px}
-  .card .owner{margin-left:auto}
-  .card .owner select{border:none;border-radius:20px;padding:3px 9px;font-size:11px;font-weight:800;cursor:pointer;-webkit-appearance:none;appearance:none}
-  .card .title{font-weight:800;font-size:13.5px;line-height:1.35;outline:none}
-  .card .title:focus{background:var(--brand-weak);border-radius:5px}
-  .card.st-done{opacity:.7}
-  .card.st-blocked{border-color:#f0b6b6;box-shadow:0 0 0 3px #fdeaea}
-  .card.late{border-color:#f0d9b0;box-shadow:0 0 0 3px #fff3e0}
+  /* ---------- card (横長) ---------- */
+  .card{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow);position:relative;transition:box-shadow .14s,transform .14s}
+  .card:hover{box-shadow:0 8px 22px rgba(74,54,32,.10)}
+  .card.late{border-color:#e0bda9;box-shadow:0 0 0 3px #f5e3d8}
+  .card.st-done{opacity:.78}
   .card.flash{animation:fl 1.1s ease}
-  @keyframes fl{0%{box-shadow:0 0 0 0 rgba(37,99,235,.5)}100%{box-shadow:0 0 0 14px rgba(37,99,235,0)}}
+  @keyframes fl{0%{box-shadow:0 0 0 0 rgba(168,124,79,.5)}100%{box-shadow:0 0 0 14px rgba(168,124,79,0)}}
 
-  .planrow{display:flex;gap:8px;padding:8px 12px;border-bottom:1px solid var(--line2);font-size:11px}
-  .plan{flex:1;background:#f7f9fc;border-radius:8px;padding:5px 8px}
-  .plan .k{color:var(--sub);font-weight:700;font-size:10px;letter-spacing:.3px}
-  .plan.act{background:#eef7f0}
-  .plan .vals{display:flex;align-items:center;gap:4px;margin-top:2px}
-  .plan input{width:38px;border:1px solid var(--line);border-radius:6px;padding:2px 4px;text-align:center;font-variant-numeric:tabular-nums;background:#fff}
-  .plan input.dur{width:34px}
+  .chead{display:flex;align-items:center;gap:12px;flex-wrap:wrap;padding:11px 14px;border-bottom:1px solid var(--line2)}
+  .statusdot{flex:0 0 auto;width:13px;height:13px;border-radius:50%;background:var(--todo)}
+  .card.st-doing .statusdot{background:var(--doing);box-shadow:0 0 0 3px #f0e0c6}
+  .card.st-done .statusdot{background:var(--done)}
+  .id{font-variant-numeric:tabular-nums;font-size:10.5px;font-weight:800;color:#fff;background:#9c8a6c;border-radius:5px;padding:2px 7px;flex:0 0 auto}
+  .title{font-weight:800;font-size:14.5px;line-height:1.3;flex:1 1 220px;min-width:160px;outline:none}
+  .title:focus{background:var(--brand-weak);border-radius:5px}
+
+  .owner{display:inline-flex;align-items:center;gap:7px;border:1.5px solid var(--oc);border-radius:22px;padding:3px 10px 3px 3px;background:#fffdf7;flex:0 0 auto}
+  .owner .ava{width:24px;height:24px;border-radius:50%;background:var(--oc);color:#fff;display:grid;place-items:center;font-size:12px;font-weight:800}
+  .owner select{border:none;background:transparent;font-weight:800;font-size:13px;color:var(--ink);cursor:pointer}
+
+  .plan{display:flex;align-items:center;gap:6px;background:#f3ecdd;border-radius:9px;padding:5px 9px;font-size:11.5px}
+  .plan.act{background:#eef0e2}
+  .plan .k{color:var(--sub);font-weight:800;font-size:10px;letter-spacing:.3px}
+  .plan b{font-variant-numeric:tabular-nums;font-weight:800}
+  .plan input{border:1px solid var(--line);border-radius:6px;padding:2px 4px;text-align:center;font-variant-numeric:tabular-nums;background:#fffdf7}
+  .plan input.t{width:44px} .plan input.d{width:34px}
   .plan .u{color:var(--sub);font-size:10px}
-  .plan .cd{margin-left:auto;font-variant-numeric:tabular-nums;font-weight:800;font-size:11.5px}
-  .plan .cd.ok{color:var(--ok)} .plan .cd.warn{color:var(--warn)} .plan .cd.bad{color:var(--bad)}
 
-  .subs{padding:6px 12px 4px;list-style:none;margin:0}
-  .sub{border-bottom:1px solid var(--line2)}
-  .sub:last-child{border-bottom:none}
-  .sub .srow{display:flex;gap:8px;align-items:flex-start;padding:6px 0}
-  .sub .scheck{flex:0 0 auto;width:18px;height:18px;border:2px solid var(--line);border-radius:6px;display:grid;place-items:center;font-size:11px;color:#fff;background:#fff;margin-top:1px}
+  .startbtn{flex:0 0 auto;border-radius:10px;padding:8px 16px;font-size:13px;font-weight:800;border:1.5px solid var(--doing);color:var(--doing);background:#fffdf7}
+  .startbtn:hover{background:#fff}
+  .startbtn.run{background:var(--doing);color:#fff;border-color:var(--doing)}
+  .startbtn.fin{background:var(--done);color:#fff;border-color:var(--done);cursor:default}
+  .undo{flex:0 0 auto;color:#bdb09a;font-size:14px;padding:4px 6px} .undo:hover{color:var(--ink)}
+  .cd{flex:0 0 auto;font-variant-numeric:tabular-nums;font-weight:800;font-size:11.5px;min-width:96px;text-align:right}
+  .cd.ok{color:var(--done)} .cd.warn{color:var(--doing)} .cd.bad{color:var(--late)}
+  .del{flex:0 0 auto;color:#c2b59c;font-size:14px;padding:2px 4px} .del:hover{color:var(--late)}
+
+  /* subtasks — 常時表示・横グリッド */
+  .subs{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:8px;padding:11px 14px}
+  .sub{border:1px solid var(--line2);border-radius:10px;padding:8px 9px;background:#fffdf7}
+  .sub .srow{display:flex;gap:8px;align-items:flex-start}
+  .sub .scheck{flex:0 0 auto;width:19px;height:19px;border:2px solid #d8ccb2;border-radius:6px;display:grid;place-items:center;font-size:12px;color:#fff;background:#fff;margin-top:1px}
   .sub .scheck.on{background:var(--done);border-color:var(--done)}
-  .sub .stext{flex:1;min-width:0}
-  .sub .stitle{font-weight:700;font-size:12.5px;line-height:1.35;outline:none}
+  .sub .stitle{flex:1;font-weight:700;font-size:12.5px;line-height:1.35;outline:none}
   .sub.done .stitle{text-decoration:line-through;color:var(--sub)}
-  .sub .stitle:focus{background:var(--brand-weak);border-radius:4px;text-decoration:none}
-  .sub .expand{flex:0 0 auto;color:#b6bdc8;font-size:11px;padding:2px 4px;margin-top:1px}
-  .sub .detail{display:none;margin:0 0 8px 26px;background:#f7f9fc;border:1px solid var(--line2);border-radius:8px;padding:7px 9px;position:relative}
-  .sub.open .detail{display:block}
-  .sub .detail textarea{width:100%;border:none;background:transparent;resize:vertical;min-height:40px;font-size:11.5px;line-height:1.5;outline:none;white-space:pre-wrap}
-  .sub .detail .copy{position:absolute;top:5px;right:6px;font-size:10px;border:1px solid var(--line);background:#fff;border-radius:6px;padding:2px 7px;font-weight:700;color:var(--sub)}
-  .sub .detail .links{margin-top:5px;display:flex;flex-direction:column;gap:3px}
+  .sub .delx{flex:0 0 auto;color:#c2b59c;font-size:11px;padding:0 2px;opacity:0}
+  .sub:hover .delx{opacity:1}
+  .sub .delx:hover{color:var(--late)}
+  .sub .detail{margin-top:6px;position:relative}
+  .sub .detail textarea{width:100%;border:1px dashed var(--line);border-radius:7px;background:#fcf8f0;padding:6px 8px;font-size:11.5px;line-height:1.5;resize:vertical;min-height:30px;outline:none;white-space:pre-wrap}
+  .sub .detail .copy{position:absolute;top:4px;right:5px;font-size:10px;border:1px solid var(--line);background:#fff;border-radius:6px;padding:1px 7px;font-weight:700;color:var(--sub)}
+  .sub .detail .links{margin-top:4px;display:flex;flex-direction:column;gap:3px}
   .sub .detail .links a{font-size:11px;color:var(--brand);word-break:break-all}
-  .sub .subdel{position:absolute;display:none}
-  .sub:hover .delx{display:inline}
-  .delx{display:none;color:#c2c8d0;font-size:12px;padding:0 2px}
-  .delx:hover{color:var(--bad)}
+  .addsub{grid-column:1/-1}
+  .addsub button{width:100%;font-size:11.5px;color:var(--sub);border:1px dashed var(--line);border-radius:8px;padding:6px;font-weight:700;background:transparent}
+  .addsub button:hover{background:#fffdf7;color:var(--ink)}
 
-  .addsub{display:flex;margin:2px 0 8px 26px}
-  .addsub button{font-size:11px;color:var(--sub);border:1px dashed var(--line);border-radius:7px;padding:3px 9px;font-weight:700}
-
-  .foot{display:flex;align-items:center;gap:6px;padding:8px 12px;border-top:1px solid var(--line2)}
-  .foot .a{border:1px solid var(--line);border-radius:7px;padding:5px 10px;font-size:11.5px;font-weight:700;background:#fff}
-  .foot .a.start{color:var(--doing)} .foot .a.start.on{background:var(--doing);color:#fff;border-color:var(--doing)}
-  .foot .a.block{color:var(--blocked);border-color:#f0c8c8} .foot .a.block.on{background:var(--blocked);color:#fff}
-  .foot .sp{flex:1}
-  .foot .prog{font-size:11px;color:var(--sub);font-variant-numeric:tabular-nums}
-  .foot .del{color:#c2c8d0;font-size:13px;padding:2px 4px} .foot .del:hover{color:var(--bad)}
-
-  .recovery{display:none;margin:0 12px 10px;background:#fff6f6;border:1px solid #f3cccc;border-radius:8px;padding:8px 9px}
-  .card.st-blocked .recovery{display:block}
-  .recovery .rh{font-size:11px;font-weight:800;color:var(--bad);margin-bottom:3px}
-  .recovery textarea{width:100%;border:none;background:transparent;resize:vertical;min-height:36px;font-size:11.5px;outline:none}
-
-  .deps{display:flex;align-items:center;gap:5px;flex-wrap:wrap;padding:6px 12px;border-top:1px solid var(--line2)}
-  .deps .dlab{font-size:10px;font-weight:800;color:var(--sub)}
-  .dchip{display:inline-flex;align-items:center;gap:4px;background:#eef1f5;border-radius:20px;padding:2px 4px 2px 8px;font-size:10.5px;max-width:170px;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
-  .dchip b{color:var(--ink)} .dchip .x{color:#9aa3af;font-size:10px;padding:0 2px} .dchip .x:hover{color:var(--bad)}
-  .deps .depadd{border:1px dashed var(--line);border-radius:20px;padding:2px 6px;font-size:11px;background:#fff;color:var(--sub);max-width:120px}
-
-  .addstep{margin:6px 0 0 90px}
-  .addstep button{border:1px dashed var(--line);background:#fff;color:var(--sub);border-radius:var(--radius);padding:9px 16px;font-size:12px;font-weight:700}
+  .addrow{margin:16px 0 0}
+  .addrow button{border:1px dashed #c7b48d;background:var(--panel);color:var(--sub);border-radius:var(--radius);padding:10px 18px;font-size:12.5px;font-weight:700}
+  .addrow button:hover{color:var(--ink)}
 
   footer{padding:6px 16px;font-size:11px;color:var(--sub);background:var(--panel);border-top:1px solid var(--line);text-align:center}
 
-  @media (max-width:560px){
-    .card{width:300px;flex-basis:300px}
-    .slot .rail{flex-basis:54px}
-    .clocks{margin-left:0;gap:12px}
-  }
-
-  /* ---------- modern header (dark) ---------- */
-  header.dark{background:linear-gradient(135deg,#0e1530 0%,#1b2550 60%,#222e63 100%);color:#fff;border-bottom:none;box-shadow:0 1px 0 rgba(255,255,255,.06)}
-  header.dark .brand small{color:#9fb0d6}
-  header.dark .fld label{color:#9fb0d6}
-  header.dark .fld input{background:rgba(255,255,255,.10);border:1px solid rgba(255,255,255,.16);color:#fff}
-  header.dark .fld input::placeholder{color:#aeb9d6}
-  header.dark .fld input[type=time]{color-scheme:dark}
-  .btn-ghost{border:1px solid rgba(255,255,255,.22);background:rgba(255,255,255,.10);color:#fff;border-radius:8px;padding:6px 10px;font-size:12.5px;font-weight:700}
-  .btn-ghost:hover{background:rgba(255,255,255,.18)}
-  .clocks{margin-left:auto;display:flex;gap:20px;align-items:flex-start}
-  .ck{text-align:right}
-  .ck .lab{display:block;font-size:10px;color:#9fb0d6;letter-spacing:.3px;margin-bottom:1px}
-  .ck .v{font-variant-numeric:tabular-nums;font-weight:800;font-size:15px}
-  .ck.elc .v{color:#7db4ff}
-
-  /* ---------- sync chip + modal ---------- */
-  .syncchip{display:inline-flex;align-items:center;gap:6px;border:1px solid var(--line);background:#fff;border-radius:20px;padding:5px 11px;font-size:11.5px;font-weight:700;color:var(--sub);box-shadow:var(--shadow)}
-  .syncchip .d{width:8px;height:8px;border-radius:50%;background:#cbd5e1}
-  .syncchip.on .d{background:#16a34a;box-shadow:0 0 0 3px #d6f5e0}
-  .syncchip.on{color:#15803d}
-
-  .modal{position:fixed;inset:0;background:rgba(13,18,33,.5);display:none;align-items:center;justify-content:center;z-index:50;padding:20px;backdrop-filter:blur(2px)}
+  /* sync modal */
+  .modal{position:fixed;inset:0;background:rgba(74,54,32,.45);display:none;align-items:center;justify-content:center;z-index:50;padding:20px;backdrop-filter:blur(2px)}
   .modal.show{display:flex}
-  .modal .box{background:#fff;border-radius:16px;width:min(520px,100%);box-shadow:0 20px 60px rgba(0,0,0,.3);overflow:hidden}
+  .modal .box{background:var(--panel);border-radius:16px;width:min(520px,100%);box-shadow:0 20px 60px rgba(0,0,0,.3);overflow:hidden}
   .modal .mh{padding:16px 18px;border-bottom:1px solid var(--line);display:flex;align-items:center;gap:8px}
   .modal .mh b{font-size:15px} .modal .mh .close{margin-left:auto;color:var(--sub);font-size:18px}
   .modal .mb{padding:16px 18px;display:flex;flex-direction:column;gap:12px}
   .modal label{font-size:11.5px;font-weight:700;color:var(--sub);display:block;margin-bottom:4px}
-  .modal textarea,.modal input{width:100%;border:1px solid var(--line);border-radius:9px;padding:9px 10px;font-size:12.5px;background:#fbfcfe}
+  .modal textarea,.modal input{width:100%;border:1px solid var(--line);border-radius:9px;padding:9px 10px;font-size:12.5px;background:#fffdf7}
   .modal textarea{min-height:120px;resize:vertical;font-family:ui-monospace,Menlo,Consolas,monospace}
   .modal .hint{font-size:11px;color:var(--sub);line-height:1.6}
-  .modal .hint code{background:#f1f4f8;border-radius:4px;padding:1px 5px}
+  .modal .hint code{background:#efe7d6;border-radius:4px;padding:1px 5px}
   .modal .mf{padding:14px 18px;border-top:1px solid var(--line);display:flex;gap:8px;align-items:center}
   .modal .mf .st{font-size:11.5px;color:var(--sub);margin-right:auto}
+
+  @media (max-width:640px){
+    .clocks{margin-left:0;gap:12px}
+    .chead{gap:8px}
+    .cd{min-width:auto}
+  }
 </style>
 <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-database-compat.js"></script>
 </head>
 <body>
 
-<header class="dark">
+<header>
   <div class="brand"><span class="dot"></span><div><b>WWDC Video Ops</b><small>即時投稿ランブック</small></div></div>
   <div class="fld"><label>イベント</label><input class="name" id="evtName" placeholder="WWDC26" /></div>
   <div class="fld"><label>基準時刻 0:00</label><input type="time" id="t0" step="60" /><button class="btn-ghost" id="t0now" title="今を基準(0:00)に">今</button></div>
@@ -214,8 +173,7 @@
 </header>
 
 <div class="toolbar">
-  <button class="btn primary" id="addStep">＋ ステップ追加</button>
-  <label class="switch"><input type="checkbox" id="wireToggle" checked /> 依存矢印</label>
+  <button class="btn primary" id="addRow">＋ 時間（行）を追加</button>
   <div class="progress"><span id="progTxt">0/0</span><span class="bar"><i id="progBar"></i></span></div>
   <div class="spacer"></div>
   <button class="syncchip" id="syncBtn"><span class="d"></span><span id="syncLabel">未接続</span></button>
@@ -225,100 +183,72 @@
   <button class="btn warnbtn" id="resetBtn">⟲ 初期化</button>
 </div>
 
-<div id="alert">
-  <div class="hd"><span class="pill" id="alertCount">0</span>⚠ 要対応 — 異常 / 遅延</div>
-  <ul id="alertList"></ul>
-</div>
-
-<div id="board">
-  <div id="timeline">
-    <svg id="wires">
-      <defs>
-        <marker id="ah"  markerWidth="9" markerHeight="9" refX="7" refY="4.5" orient="auto"><path d="M0,0 L9,4.5 L0,9 Z" fill="#c2cad6"/></marker>
-        <marker id="ahb" markerWidth="9" markerHeight="9" refX="7" refY="4.5" orient="auto"><path d="M0,0 L9,4.5 L0,9 Z" fill="#dc2626"/></marker>
-        <marker id="ahd" markerWidth="9" markerHeight="9" refX="7" refY="4.5" orient="auto"><path d="M0,0 L9,4.5 L0,9 Z" fill="#16a34a"/></marker>
-      </defs>
-    </svg>
-  </div>
-  <div class="addstep"><button id="addStepBottom">＋ 末尾にステップ</button></div>
+<div id="board"><div id="timeline"></div>
+  <div class="addrow" style="max-width:1100px;margin:16px auto 0"><button id="addRowBottom">＋ 末尾に時間（行）を追加</button></div>
 </div>
 
 <div class="modal" id="syncModal">
   <div class="box">
     <div class="mh"><span>🔗</span><b>チーム同期（Firebase）</b><button class="close" id="syncClose">✕</button></div>
     <div class="mb">
-      <div>
-        <label>Firebase ウェブ設定（firebaseConfig の JSON）</label>
+      <div><label>Firebase ウェブ設定（firebaseConfig の JSON）</label>
         <textarea id="fbConfig" placeholder='{
   "apiKey": "…",
   "authDomain": "xxx.firebaseapp.com",
   "databaseURL": "https://xxx-default-rtdb.firebaseio.com",
   "projectId": "xxx",
   "appId": "…"
-}'></textarea>
-      </div>
-      <div>
-        <label>ルームID（チームで同じ文字列を共有）</label>
-        <input id="fbRoom" placeholder="wwdc26" />
-      </div>
-      <div class="hint">
-        ① Firebase コンソールで <b>Realtime Database</b> を作成 → ② プロジェクト設定の「ウェブアプリ」から <code>firebaseConfig</code> をコピーして上に貼付 → ③ 同じ <b>ルームID</b> をチーム全員で使うと、チェックや編集がリアルタイムに同期します。<br>
-        最初に接続した人の内容が共有され、以後は全員で共同編集（最新の変更が反映）。設定はこのブラウザに保存されます。
-      </div>
+}'></textarea></div>
+      <div><label>ルームID（チームで同じ文字列を共有）</label><input id="fbRoom" placeholder="wwdc26" /></div>
+      <div class="hint">① Firebase で <b>Realtime Database</b> を作成 → ② プロジェクト設定の「ウェブアプリ」から <code>firebaseConfig</code> をコピーして貼付 → ③ 同じ <b>ルームID</b> をチームで使うとリアルタイム同期します。設定はこのブラウザに保存されます。</div>
     </div>
-    <div class="mf">
-      <span class="st" id="syncStatus">未接続</span>
+    <div class="mf"><span class="st" id="syncStatus">未接続</span>
       <button class="btn warnbtn" id="syncDisconnect">切断</button>
-      <button class="btn primary" id="syncConnect">接続</button>
-    </div>
+      <button class="btn primary" id="syncConnect">接続</button></div>
   </div>
 </div>
 
-<footer>Waterfall（時刻順）＋依存矢印 / リアルタイム同期（Firebase）対応。基準時刻=イベント開始（または任意の0:00）。</footer>
+<footer>Waterfall（時刻順）/ リアルタイム同期（Firebase）。基準時刻=イベント開始（または任意の0:00）。実績は「開始」→「終了」で記録、各入力は手修正可。</footer>
 
 <script>
 "use strict";
 
-/* ============ Data ============ */
-const OWNER_COLORS={
-  "マメ":"#f6c343","修一":"#5b9bff","日本チーム":"#b794f6","校閲":"#34d399",
-  "編集":"#fb7185","SNS":"#22d3ee","未割当":"#cbd5e1"
-};
-const PALETTE=["#f6c343","#5b9bff","#b794f6","#34d399","#fb7185","#22d3ee","#f59e0b","#a78bfa"];
+/* ============ data ============ */
+const OWNER_COLORS={ "マメ":"#c9904f","修一":"#7c8a55","日本チーム":"#9c6f8e","校閲":"#5f8a86","編集":"#b06b54","SNS":"#5f7fa8","未割当":"#bdb29c" };
+const PALETTE=["#c9904f","#7c8a55","#9c6f8e","#5f8a86","#b06b54","#5f7fa8","#a7873f","#8a6f9c"];
 
 function template(){
   return {
-    event:"WWDC26",
-    t0:null,
-    owners:Object.assign({},OWNER_COLORS),
+    event:"WWDC26", t0:null, owners:Object.assign({},OWNER_COLORS),
+    times:[60,75,105],
     steps:[
-      {id:"005",title:"事前撮影可能な素材を準備",owner:"マメ",tStart:60,tDur:15,aStart:60,aDur:23,status:"todo",deps:[],rec:"撮影NG時は予備iPhone/画面収録に即切替。素材は二重保存。",subs:[
+      {id:"005",title:"事前撮影可能な素材を準備",owner:"マメ",tStart:60,tDur:15,aStart:null,aEnd:null,status:"todo",subs:[
         {title:"以下をiPhoneで収録",done:false,detail:"今年、iPhoneがめちゃくちゃ変わります。\nこの秋Appleがリリースする新機能発表会に参加してきたので、内容をギュッと紹介していきます。\nもちろんプライバシーは完全に守られた状態で使えます。\nここはAppleがずっと大切にしている部分ですよね。\n今回の発表、Appleがここ数年コツコツ築いてきた\nハード、ソフトの土台が日の目を浴びた面白い発表だったと思います。\nこのあとすぐ、さらに詳しい解説動画と、ここApple本社で、\n実際に新OSを触ってみた動画も投稿予定なので高評価、チャンネル登録してお待ちください！"},
         {title:"以下をiPhoneで収録",done:false,detail:"発表内容に驚いているシーン"},
         {title:"撮影素材をアップロード",done:false,detail:"Googleドライブにアップロード\nhttps://drive.google.com/drive/folders/1KUKNcAfA-UMFzVMoJcBu3yfq-U7gHS9T?usp=sharing"},
         {title:"アップロード完了をSlackで連絡する",done:false,detail:""},
       ]},
-      {id:"010",title:"事前準備（編集）",owner:"修一",tStart:75,tDur:30,aStart:null,aDur:null,status:"todo",deps:["005"],rec:"編集者ダウン→バックアップへ即引継ぎ。プロジェクトを共有ドライブへ。",subs:[
+      {id:"010",title:"事前準備（編集）",owner:"修一",tStart:75,tDur:30,aStart:null,aEnd:null,status:"todo",subs:[
         {title:"撮影素材をダウンロード",done:false,detail:"Googleドライブからダウンロード\nhttps://drive.google.com/drive/folders/1KUKNcAfA-UMFzVMoJcBu3yfq-U7gHS9T?usp=sharing"},
         {title:"アップロード素材を編集開始",done:false,detail:"事前に準備したテロップ、BGMなどの素材を使用し編集開始"},
         {title:"アップロード準備",done:false,detail:"YouTube Studioをアップロード画面にしておく"},
       ]},
-      {id:"015",title:"事前準備（機材）",owner:"マメ",tStart:75,tDur:30,aStart:null,aDur:null,status:"todo",deps:[],rec:"機材不調→予備機に切替。設定値は事前チェックリストで再確認。",subs:[
+      {id:"015",title:"事前準備（機材）",owner:"マメ",tStart:75,tDur:30,aStart:null,aEnd:null,status:"todo",subs:[
         {title:"撮影の準備",done:false,detail:"iPhone 17 Proの映像設定が「1080p / 30fps」になっていることを確認"},
         {title:"録音の準備",done:false,detail:"iPhone 17 Pro Max、iPhone 17、Plaudを録音用に設置する"},
         {title:"X投稿の準備",done:false,detail:"X投稿用テンプレートを準備する\nスクショ切り取りショートカットが正しく動作することを確認する"},
         {title:"自動翻訳の準備",done:false,detail:"Even G2のライブ翻訳をオンにする"},
       ]},
-      {id:"020",title:"ライブ配信準備",owner:"日本チーム",tStart:105,tDur:5,aStart:null,aDur:null,status:"todo",deps:[],rec:"配信が映らない→予備回線/別端末で再生。アーカイブURLを確保。",subs:[
+      {id:"020",title:"ライブ配信準備",owner:"日本チーム",tStart:105,tDur:5,aStart:null,aEnd:null,status:"todo",subs:[
         {title:"ライブ配信の再生を開始する",done:false,detail:"＜URL＞"},
       ]},
     ]
   };
 }
 
-const KEY="wwdc-ops-v2";
+const KEY="wwdc-ops-v3";
 let DB=load();
-function load(){ try{const s=localStorage.getItem(KEY); if(s){const d=JSON.parse(s); if(!d.owners)d.owners=Object.assign({},OWNER_COLORS); return d;}}catch(e){} return template(); }
+function load(){ try{const s=localStorage.getItem(KEY); if(s){const d=JSON.parse(s); if(!d.owners)d.owners=Object.assign({},OWNER_COLORS); if(!d.times)d.times=[]; return d;}}catch(e){} return template(); }
 function saveLocal(){ try{localStorage.setItem(KEY,JSON.stringify(DB));}catch(e){} }
 function save(){ saveLocal(); scheduleRemotePush(); }
 
@@ -331,286 +261,211 @@ const fmtClock=d=>pad(d.getHours())+":"+pad(d.getMinutes())+":"+pad(d.getSeconds
 const fmtHM=d=>pad(d.getHours())+":"+pad(d.getMinutes());
 function fmtOff(min){ if(min==null||isNaN(min))return "-:--"; const neg=min<0;min=Math.abs(min);return (neg?"-":"")+Math.floor(min/60)+":"+pad(min%60); }
 function parseOff(str){ if(str==null)return null; str=(""+str).trim(); if(str==="")return null; if(str.includes(":")){const[h,m]=str.split(":").map(Number);return (h||0)*60+(m||0);} const n=Number(str); return isNaN(n)?null:n; }
-function fmtCount(sec){const neg=sec<0;sec=Math.abs(Math.round(sec));const m=Math.floor(sec/60),s=sec%60;return (neg?"-":"")+m+":"+pad(s);}
 function escapeHtml(s){return (s||"").replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;"}[c]));}
-function linkify(s){return escapeHtml(s).replace(/(https?:\/\/[^\s<]+)/g,'<a href="$1" target="_blank" rel="noopener">$1</a>');}
 function extractLinks(s){return (s||"").match(/https?:\/\/[^\s<]+/g)||[];}
 function newId(){ const nums=DB.steps.map(s=>parseInt(s.id,10)).filter(n=>!isNaN(n)); const max=nums.length?Math.max(...nums):0; return pad(max+5).padStart(3,"0"); }
 function ownerColor(o){ if(!DB.owners[o]){DB.owners[o]=PALETTE[Object.keys(DB.owners).length%PALETTE.length];} return DB.owners[o]; }
 function getT0(){return DB.t0?new Date(DB.t0):null;}
 function nowOffset(){const t0=getT0(); return t0?Math.round((Date.now()-t0.getTime())/60000):null;}
+function allTimes(){ const set=new Set(DB.times||[]); DB.steps.forEach(s=>set.add(s.tStart)); return [...set].sort((a,b)=>a-b); }
 
 /* ============ render ============ */
-const timeline=$("#timeline"), wires=$("#wires");
-const openSubs=new Set(); // 展開中サブタスクの開閉状態を再描画間で保持
+const timeline=$("#timeline");
+const openState=null; // (詳細は常時表示)
 
 function render(){
-  const board=$("#board"); const sTop=board?board.scrollTop:0, sLeft=board?board.scrollLeft:0;
-  $$(".slot",timeline).forEach(n=>n.remove());
-  const steps=[...DB.steps].sort((a,b)=>(a.tStart-b.tStart)||a.id.localeCompare(b.id));
-  // group by tStart
-  const groups=[];
-  steps.forEach(s=>{ let g=groups.find(g=>g.t===s.tStart); if(!g){g={t:s.tStart,items:[]};groups.push(g);} g.items.push(s); });
+  const board=$("#board"); const sTop=board?board.scrollTop:0;
+  timeline.innerHTML="";
+  const times=allTimes();
   const off=nowOffset();
-  groups.forEach((g,i)=>{
-    const next=groups[i+1];
-    const current = off!=null && off>=g.t && (!next || off<next.t);
-    const slot=document.createElement("div");
-    slot.className="slot"+(current?" current":"");
-    slot.innerHTML=`<div class="rail"><div class="time">${fmtOff(g.t)}<small>基準+</small></div><div class="node"></div><div class="line"></div></div><div class="steps"></div>`;
-    const host=slot.querySelector(".steps");
-    g.items.forEach(s=>host.appendChild(cardEl(s)));
-    timeline.appendChild(slot);
+  times.forEach((t,i)=>{
+    const next=times[i+1];
+    const current = off!=null && off>=t && (next==null || off<next);
+    const items=DB.steps.filter(s=>s.tStart===t).sort((a,b)=>a.id.localeCompare(b.id));
+
+    const head=document.createElement("div");
+    head.className="slothead"+(current?" current":"");
+    head.innerHTML=`<span class="tnode"></span><span class="tlab">基準+</span>
+      <input class="stime" value="${fmtOff(t)}" title="この時間（縦軸）を変更。配下のカードの目標も連動">
+      ${current?'<span class="now">現在地</span>':''}
+      <span class="sp"></span>
+      <button class="sbtn sadd">＋ ステップ</button>
+      ${items.length?'':'<button class="sbtn sdel" title="空の行を削除">🗑</button>'}`;
+    head.querySelector(".stime").onchange=e=>changeRowTime(t,e.target.value);
+    head.querySelector(".sadd").onclick=()=>addStep(t);
+    if(!items.length) head.querySelector(".sdel").onclick=()=>{ DB.times=DB.times.filter(x=>x!==t); save(); render(); };
+    timeline.appendChild(head);
+
+    const wrap=document.createElement("div"); wrap.className="slotcards";
+    items.forEach(s=>wrap.appendChild(cardEl(s)));
+    timeline.appendChild(wrap);
   });
-  timeline.appendChild(wires);
-  renderAlert(); renderProgress();
-  if(board){board.scrollTop=sTop;board.scrollLeft=sLeft;} // スクロール位置を維持（トップに飛ばない）
-  requestAnimationFrame(drawWires);
+  renderProgress();
+  if(board)board.scrollTop=sTop;
 }
 
 function ownerSelect(s){
   const names=Object.keys(DB.owners);
   if(!names.includes(s.owner)) names.unshift(s.owner);
   const opts=names.map(n=>`<option ${n===s.owner?"selected":""}>${escapeHtml(n)}</option>`).join("")+`<option value="__new">＋ 新規担当…</option>`;
-  return `<select style="background:${ownerColor(s.owner)};color:#3b2f00">${opts}</select>`;
+  return `<span class="owner" style="--oc:${ownerColor(s.owner)}"><span class="ava">${escapeHtml((s.owner||"?").slice(0,1))}</span><select>${opts}</select></span>`;
 }
 
-function depChips(s){
-  return (s.deps||[]).map(d=>{const ds=stepById(d);return `<span class="dchip"><b>${escapeHtml(d)}</b> ${escapeHtml(ds?ds.title:"?")}<button class="x" data-dep="${escapeHtml(d)}">✕</button></span>`;}).join("");
-}
-function depOptions(s){
-  return DB.steps.filter(o=>o.id!==s.id && !(s.deps||[]).includes(o.id)).map(o=>`<option value="${escapeHtml(o.id)}">${escapeHtml(o.id)} ${escapeHtml(o.title)}</option>`).join("");
-}
+function startLabel(s){ return s.status==="done"?"✓ 完了":s.status==="doing"?"■ 終了":"▶ 開始"; }
+function startClass(s){ return s.status==="done"?"fin":s.status==="doing"?"run":""; }
 
 function cardEl(s){
   const el=document.createElement("div");
-  el.className=`card st-${s.status}`;
-  el.dataset.id=s.id;
+  el.className=`card st-${s.status}`; el.dataset.id=s.id;
+  const aDur=(s.aStart!=null&&s.aEnd!=null)?(s.aEnd-s.aStart):null;
   const subsHtml=s.subs.map((sub,i)=>subHtml(s,sub,i)).join("");
   el.innerHTML=`
-   <div class="hd">
-     <button class="chk ${s.status==="done"?"on":""}">${s.status==="done"?"✓":""}</button>
-     <div class="htext">
-       <div class="idrow"><span class="id">${escapeHtml(s.id)}</span>
-         <span class="owner">${ownerSelect(s)}</span></div>
-       <div class="title" contenteditable="true" spellcheck="false">${escapeHtml(s.title)}</div>
-     </div>
+   <div class="chead">
+     <span class="statusdot"></span>
+     <span class="id">${escapeHtml(s.id)}</span>
+     <span class="title" contenteditable="true" spellcheck="false">${escapeHtml(s.title)}</span>
+     ${ownerSelect(s)}
+     <span class="plan"><span class="k">目標</span><b>基準+${fmtOff(s.tStart)}</b><span class="u">/</span><input class="d tdur" value="${s.tDur??""}"><span class="u">分</span></span>
+     <span class="plan act"><span class="k">実績</span><input class="t astart" value="${s.aStart!=null?fmtOff(s.aStart):""}" placeholder="-:--" title="実績開始(手修正可)"><span class="u">→</span><input class="t aend" value="${s.aEnd!=null?fmtOff(s.aEnd):""}" placeholder="-:--" title="実績終了(手修正可)"><b style="margin-left:4px">${aDur!=null?aDur+"分":""}</b></span>
+     <button class="startbtn ${startClass(s)}">${startLabel(s)}</button>
+     <button class="undo" title="1つ戻す（押し間違え修正）">↺</button>
+     <span class="cd" data-cd></span>
+     <button class="del" title="ステップ削除">🗑</button>
    </div>
-   <div class="planrow">
-     <div class="plan"><span class="k">目標</span>
-       <div class="vals"><input class="tstart" value="${fmtOff(s.tStart)}" title="開始(基準+H:MM)"><span class="u">/</span><input class="dur tdur" value="${s.tDur??""}"><span class="u">分</span>
-       <span class="cd" data-cd></span></div></div>
-     <div class="plan act"><span class="k">実績</span>
-       <div class="vals"><input class="astart" value="${s.aStart!=null?fmtOff(s.aStart):""}" placeholder="-:--" title="実績開始"><span class="u">/</span><input class="dur adur" value="${s.aDur??""}" placeholder=""><span class="u">分</span></div></div>
-   </div>
-   <ul class="subs">${subsHtml}</ul>
-   <div class="addsub"><button>＋ サブタスク</button></div>
-   <div class="recovery"><div class="rh">🛟 異常時フロー（復旧手順）</div><textarea>${escapeHtml(s.rec||"")}</textarea></div>
-   <div class="deps"><span class="dlab">依存元</span>${depChips(s)}<select class="depadd"><option value="">＋</option>${depOptions(s)}</select></div>
-   <div class="foot">
-     <button class="a start ${s.status==="doing"?"on":""}">開始</button>
-     <button class="a block ${s.status==="blocked"?"on":""}">異常</button>
-     <span class="sp"></span>
-     <span class="prog">${s.subs.filter(x=>x.done).length}/${s.subs.length}</span>
-     <button class="del" title="削除">🗑</button>
-   </div>`;
+   <div class="subs">${subsHtml}<div class="addsub"><button>＋ サブタスク</button></div></div>`;
 
-  // --- header events ---
-  el.querySelector(".chk").onclick=()=>setStatus(s,s.status==="done"?"todo":"done");
-  const titleEl=el.querySelector(".title");
-  titleEl.onblur=()=>{s.title=titleEl.textContent.trim();save();};
+  // header
+  el.querySelector(".statusdot").title=({todo:"未開始",doing:"進行中",done:"完了"})[s.status];
+  const titleEl=el.querySelector(".title"); titleEl.onblur=()=>{s.title=titleEl.textContent.trim();save();};
   const osel=el.querySelector(".owner select");
-  osel.onchange=e=>{ if(e.target.value==="__new"){ const n=prompt("新しい担当名"); if(n){DB.owners[n]=PALETTE[Object.keys(DB.owners).length%PALETTE.length]; s.owner=n;} } else s.owner=e.target.value; save(); render(); };
-
-  // --- plan edits ---
-  el.querySelector(".tstart").onchange=e=>{const v=parseOff(e.target.value); if(v!=null){s.tStart=v;save();render();}};
+  osel.onchange=e=>{ if(e.target.value==="__new"){const n=prompt("新しい担当名");if(n){DB.owners[n]=PALETTE[Object.keys(DB.owners).length%PALETTE.length];s.owner=n;}} else s.owner=e.target.value; save();render(); };
   el.querySelector(".tdur").onchange=e=>{s.tDur=Number(e.target.value)||0;save();};
-  el.querySelector(".astart").onchange=e=>{s.aStart=parseOff(e.target.value);save();};
-  el.querySelector(".adur").onchange=e=>{s.aDur=e.target.value===""?null:Number(e.target.value);save();};
+  el.querySelector(".astart").onchange=e=>{s.aStart=parseOff(e.target.value); fixStatus(s); save();render();};
+  el.querySelector(".aend").onchange=e=>{s.aEnd=parseOff(e.target.value); fixStatus(s); save();render();};
+  el.querySelector(".startbtn").onclick=()=>toggleStart(s);
+  el.querySelector(".undo").onclick=()=>undoStep(s);
+  el.querySelector(".del").onclick=()=>{ if(confirm("ステップ「"+s.title+"」を削除しますか？")){ DB.steps=DB.steps.filter(x=>x!==s); save();render(); } };
 
-  // --- subs ---
+  // subs
   el.querySelectorAll(".sub").forEach((li,i)=>bindSub(s,li,i));
   el.querySelector(".addsub button").onclick=()=>{s.subs.push({title:"新規サブタスク",done:false,detail:""});save();render();};
-
-  // --- recovery ---
-  const rec=el.querySelector(".recovery textarea"); rec.oninput=()=>{s.rec=rec.value;save();};
-
-  // --- deps ---
-  el.querySelectorAll(".deps .dchip .x").forEach(b=>b.onclick=()=>{s.deps=s.deps.filter(d=>d!==b.dataset.dep);save();render();});
-  el.querySelector(".depadd").onchange=e=>{ if(e.target.value){ if(!s.deps.includes(e.target.value))s.deps.push(e.target.value); save();render(); } };
-
-  // --- footer ---
-  el.querySelector(".a.start").onclick=()=>setStatus(s,s.status==="doing"?"todo":"doing");
-  el.querySelector(".a.block").onclick=()=>setStatus(s,s.status==="blocked"?"todo":"blocked");
-  el.querySelector(".del").onclick=()=>{ if(confirm("ステップ「"+s.title+"」を削除しますか？")){ DB.steps=DB.steps.filter(x=>x!==s); DB.steps.forEach(x=>x.deps=x.deps.filter(d=>d!==s.id)); save();render(); } };
-
   return el;
 }
 
 function subHtml(s,sub,i){
   const links=extractLinks(sub.detail);
   const linkHtml=links.length?`<div class="links">${links.map(u=>`<a href="${escapeHtml(u)}" target="_blank" rel="noopener">🔗 ${escapeHtml(u)}</a>`).join("")}</div>`:"";
-  const hasDetail=(sub.detail||"").trim()!=="";
-  return `<li class="sub ${sub.done?"done":""} ${openSubs.has(s.id+":"+i)?"open":""}" data-i="${i}">
+  return `<div class="sub ${sub.done?"done":""}" data-i="${i}">
     <div class="srow">
       <button class="scheck ${sub.done?"on":""}">${sub.done?"✓":""}</button>
-      <div class="stext"><span class="stitle" contenteditable="true" spellcheck="false">${escapeHtml(sub.title)}</span></div>
-      <button class="expand" title="詳細/台本">${hasDetail?"📄":"＋"}</button>
+      <span class="stitle" contenteditable="true" spellcheck="false">${escapeHtml(sub.title)}</span>
       <button class="delx" title="削除">✕</button>
     </div>
-    <div class="detail">
-      <button class="copy">コピー</button>
-      <textarea placeholder="台本 / 詳細 / URL…">${escapeHtml(sub.detail||"")}</textarea>
-      ${linkHtml}
-    </div>
-  </li>`;
+    <div class="detail"><button class="copy">コピー</button>
+      <textarea placeholder="台本 / 詳細 / URL…">${escapeHtml(sub.detail||"")}</textarea>${linkHtml}</div>
+  </div>`;
 }
-
 function bindSub(s,li,i){
   const sub=s.subs[i];
-  li.querySelector(".scheck").onclick=()=>{ // 局所更新：再描画せずチェックだけ反映（スクロール/編集中を維持）
-    sub.done=!sub.done; save();
+  li.querySelector(".scheck").onclick=()=>{ sub.done=!sub.done; save();
     li.classList.toggle("done",sub.done);
     const c=li.querySelector(".scheck"); c.classList.toggle("on",sub.done); c.textContent=sub.done?"✓":"";
-    const card=li.closest(".card"); const st=stepById(card.dataset.id);
-    card.querySelector(".prog").textContent=st.subs.filter(x=>x.done).length+"/"+st.subs.length;
     renderProgress();
   };
   const t=li.querySelector(".stitle"); t.onblur=()=>{sub.title=t.textContent.trim();save();};
-  const exp=li.querySelector(".expand"); exp.onclick=()=>{ const k=s.id+":"+i; if(openSubs.has(k))openSubs.delete(k);else openSubs.add(k); li.classList.toggle("open"); };
   const ta=li.querySelector(".detail textarea"); ta.oninput=()=>{sub.detail=ta.value;save();};
   li.querySelector(".copy").onclick=()=>{navigator.clipboard?.writeText(sub.detail||"");const b=li.querySelector(".copy");b.textContent="✓";setTimeout(()=>b.textContent="コピー",900);};
   li.querySelector(".delx").onclick=()=>{s.subs.splice(i,1);save();render();};
 }
 
-function setStatus(s,st){
-  s.status=st;
-  const off=nowOffset();
-  if(st==="doing" && s.aStart==null && off!=null) s.aStart=off;
-  if(st==="done"){ if(s.aStart==null && off!=null) s.aStart=off; if(s.aDur==null && off!=null && s.aStart!=null) s.aDur=Math.max(0,off-s.aStart); s.subs.forEach(x=>x.done=true); }
+/* ---- start/stop actual ---- */
+function ensureT0(){ if(!getT0()){const d=new Date();d.setSeconds(0,0);DB.t0=d.toISOString();const i=$("#t0");if(i)i.value=fmtHM(d);} }
+function toggleStart(s){
+  if(s.status==="todo"){ ensureT0(); s.status="doing"; s.aStart=nowOffset(); s.aEnd=null; }
+  else if(s.status==="doing"){ s.status="done"; s.aEnd=nowOffset(); }
+  // done: no-op（修正は↺か実績入力で）
   save(); render();
 }
+function undoStep(s){
+  if(s.status==="done"){ s.status="doing"; s.aEnd=null; }
+  else if(s.status==="doing"){ s.status="todo"; s.aStart=null; }
+  save(); render();
+}
+function fixStatus(s){ // 実績入力に合わせて状態を整える
+  if(s.aEnd!=null) s.status="done";
+  else if(s.aStart!=null) s.status="doing";
+  else s.status="todo";
+}
 
-/* ---- escalation ---- */
-function renderAlert(){
-  const off=nowOffset();
-  const items=[];
-  DB.steps.forEach(s=>{
-    if(s.status==="blocked") items.push({s,type:"blocked",label:"異常"});
-    else if(s.status!=="done" && off!=null && off>s.tStart+(s.tDur||0)) items.push({s,type:"late",label:"遅延"});
-  });
-  const a=$("#alert");
-  if(!items.length){a.classList.remove("show");return;}
-  a.classList.add("show");
-  $("#alertCount").textContent=items.length;
-  $("#alertList").innerHTML=items.map(it=>`<li data-go="${it.s.id}">
-     <span class="tag ${it.type}">${it.label}</span>
-     <b>${escapeHtml(it.s.id)} ${escapeHtml(it.s.title)}</b>
-     <span style="color:var(--sub)">${it.type==="blocked"?escapeHtml((it.s.rec||"復旧手順未記入").split("\n")[0]):"目標 "+fmtOff(it.s.tStart)+"+"+(it.s.tDur||0)+"分 を超過"}</span>
-     <button class="go">対応へ ↗</button></li>`).join("");
-  $$("#alertList li").forEach(li=>li.querySelector(".go").onclick=()=>jumpTo(li.dataset.go));
+/* ---- row time editing ---- */
+function changeRowTime(oldT,val){
+  const nt=parseOff(val); if(nt==null){render();return;}
+  if(DB.times){ DB.times=DB.times.map(x=>x===oldT?nt:x); if(!DB.times.includes(nt))DB.times.push(nt); }
+  DB.steps.forEach(s=>{ if(s.tStart===oldT) s.tStart=nt; });
+  save(); render();
+}
+function addStep(t){
+  const s={id:newId(),title:"新規ステップ",owner:"未割当",tStart:t,tDur:10,aStart:null,aEnd:null,status:"todo",subs:[{title:"サブタスク",done:false,detail:""}]};
+  DB.steps.push(s); save(); render(); setTimeout(()=>jumpTo(s.id),60);
+}
+function addRow(){
+  const times=allTimes(); const max=times.length?Math.max(...times):0; let nt=max+15;
+  DB.times=DB.times||[]; if(!DB.times.includes(nt))DB.times.push(nt); save(); render();
 }
 function jumpTo(id){const c=$(`.card[data-id="${id}"]`);if(!c)return;c.scrollIntoView({behavior:"smooth",block:"center"});c.classList.remove("flash");void c.offsetWidth;c.classList.add("flash");}
 
 function renderProgress(){
-  let done=0,tot=0;
-  DB.steps.forEach(s=>{tot+=s.subs.length;done+=s.subs.filter(x=>x.done).length;});
+  let done=0,tot=0; DB.steps.forEach(s=>{tot+=s.subs.length;done+=s.subs.filter(x=>x.done).length;});
   $("#progTxt").textContent=`${done}/${tot} 完了`;
   $("#progBar").style.width=(tot?Math.round(done/tot*100):0)+"%";
 }
 
-/* ---- wires ---- */
-function drawWires(){
-  const cw=timeline.scrollWidth, ch=timeline.scrollHeight;
-  wires.setAttribute("width",cw);wires.setAttribute("height",ch);wires.setAttribute("viewBox",`0 0 ${cw} ${ch}`);
-  $$("path.wire",wires).forEach(p=>p.remove());
-  const cr=timeline.getBoundingClientRect();
-  DB.steps.forEach(t=>{
-    const tgt=$(`.card[data-id="${t.id}"]`); if(!tgt)return; const tr=tgt.getBoundingClientRect();
-    (t.deps||[]).forEach(dep=>{
-      const src=$(`.card[data-id="${dep}"]`); if(!src)return; const sr=src.getBoundingClientRect();
-      const x1=sr.left-cr.left+sr.width/2, y1=sr.bottom-cr.top;
-      const x2=tr.left-cr.left+tr.width/2, y2=tr.top-cr.top;
-      const blocked=t.status==="blocked"||stepById(dep)?.status==="blocked";
-      const done=t.status==="done"&&stepById(dep)?.status==="done";
-      const color=blocked?"#dc2626":done?"#16a34a":"#c2cad6";
-      const mk=blocked?"url(#ahb)":done?"url(#ahd)":"url(#ah)";
-      const dy=Math.max(20,(y2-y1)/2);
-      const p=document.createElementNS("http://www.w3.org/2000/svg","path");
-      p.setAttribute("class","wire");
-      p.setAttribute("d",`M${x1},${y1} C${x1},${y1+dy} ${x2},${y2-dy} ${x2},${y2}`);
-      p.setAttribute("fill","none");p.setAttribute("stroke",color);
-      p.setAttribute("stroke-width",blocked?"2.4":"1.8");p.setAttribute("marker-end",mk);
-      if(blocked)p.setAttribute("stroke-dasharray","6 4");
-      wires.appendChild(p);
-    });
-  });
-}
-
-/* ============ Firebase realtime sync ============ */
+/* ============ Firebase sync ============ */
 const SYNC_KEY="wwdc-ops-sync";
 const SYNC={on:false,room:null,clientId:Math.random().toString(36).slice(2),ref:null,applying:false,timer:null};
 function nowHMS(){return fmtClock(new Date());}
-function setSyncUI(){
-  const chip=$("#syncBtn");
-  chip.classList.toggle("on",SYNC.on);
-  $("#syncLabel").textContent=SYNC.on?("同期: "+SYNC.room):"未接続";
-}
-function setSyncStatus(t){ const e=$("#syncStatus"); if(e)e.textContent=t; }
-
-function scheduleRemotePush(){ if(!SYNC.on||SYNC.applying)return; clearTimeout(SYNC.timer); SYNC.timer=setTimeout(pushRemote,400); }
-function pushRemote(){
-  if(!SYNC.on||!SYNC.ref)return;
-  SYNC.ref.set({data:DB,updatedAt:Date.now(),by:SYNC.clientId})
-    .then(()=>setSyncStatus("同期済 "+nowHMS()))
-    .catch(e=>setSyncStatus("書込失敗: "+e.message));
-}
+function setSyncUI(){const chip=$("#syncBtn");chip.classList.toggle("on",SYNC.on);$("#syncLabel").textContent=SYNC.on?("同期: "+SYNC.room):"未接続";}
+function setSyncStatus(t){const e=$("#syncStatus");if(e)e.textContent=t;}
+function scheduleRemotePush(){if(!SYNC.on||SYNC.applying)return;clearTimeout(SYNC.timer);SYNC.timer=setTimeout(pushRemote,400);}
+function pushRemote(){if(!SYNC.on||!SYNC.ref)return;SYNC.ref.set({data:DB,updatedAt:Date.now(),by:SYNC.clientId}).then(()=>setSyncStatus("同期済 "+nowHMS())).catch(e=>setSyncStatus("書込失敗: "+e.message));}
 function syncConnect(config,room){
-  if(typeof firebase==="undefined"){ setSyncStatus("Firebase SDK未読込（オフライン）"); return; }
-  try{ if(!firebase.apps.length) firebase.initializeApp(config); }catch(e){ setSyncStatus("設定エラー: "+e.message); return; }
-  let db; try{ db=firebase.database(); }catch(e){ setSyncStatus("databaseURL を確認してください"); return; }
-  if(SYNC.ref) SYNC.ref.off();
-  SYNC.ref=db.ref("rooms/"+room); SYNC.room=room; SYNC.on=true;
+  if(typeof firebase==="undefined"){setSyncStatus("Firebase SDK未読込（オフライン）");return;}
+  try{if(!firebase.apps.length)firebase.initializeApp(config);}catch(e){setSyncStatus("設定エラー: "+e.message);return;}
+  let db;try{db=firebase.database();}catch(e){setSyncStatus("databaseURL を確認してください");return;}
+  if(SYNC.ref)SYNC.ref.off();
+  SYNC.ref=db.ref("rooms/"+room);SYNC.room=room;SYNC.on=true;
   localStorage.setItem(SYNC_KEY,JSON.stringify({config,room}));
-  SYNC.ref.on("value",snap=>{
-    const v=snap.val();
-    if(!v||!v.data){ pushRemote(); return; }      // 空ルーム→ローカルを共有
-    if(v.by===SYNC.clientId) return;               // 自分の書込のエコーは無視
-    SYNC.applying=true; DB=v.data; saveLocal(); SYNC.applying=false;
-    syncFormFromDB(); render();
-    setSyncStatus("更新受信 "+nowHMS());
+  SYNC.ref.on("value",snap=>{const v=snap.val();
+    if(!v||!v.data){pushRemote();return;}
+    if(v.by===SYNC.clientId)return;
+    SYNC.applying=true;DB=v.data;saveLocal();SYNC.applying=false;
+    syncFormFromDB();render();setSyncStatus("更新受信 "+nowHMS());
   },err=>setSyncStatus("接続失敗: "+err.message));
-  setSyncUI(); setSyncStatus("接続中: "+room);
+  setSyncUI();setSyncStatus("接続中: "+room);
 }
-function syncDisconnect(){ if(SYNC.ref)SYNC.ref.off(); SYNC.on=false; SYNC.ref=null; localStorage.removeItem(SYNC_KEY); setSyncUI(); setSyncStatus("未接続"); }
-function syncFormFromDB(){ // リモート受信時にヘッダー入力欄も追従
-  $("#evtName").value=DB.event||"";
-  if(DB.t0){const d=new Date(DB.t0);$("#t0").value=pad(d.getHours())+":"+pad(d.getMinutes());} else $("#t0").value="";
-}
+function syncDisconnect(){if(SYNC.ref)SYNC.ref.off();SYNC.on=false;SYNC.ref=null;localStorage.removeItem(SYNC_KEY);setSyncUI();setSyncStatus("未接続");}
+function syncFormFromDB(){$("#evtName").value=DB.event||"";if(DB.t0){const d=new Date(DB.t0);$("#t0").value=pad(d.getHours())+":"+pad(d.getMinutes());}else $("#t0").value="";}
 
-/* ============ live tick ============ */
+/* ============ tick ============ */
 const PT_FMT=new Intl.DateTimeFormat("en-US",{timeZone:"America/Los_Angeles",hour:"2-digit",minute:"2-digit",second:"2-digit",hour12:false});
 function tick(){
   const now=new Date();
   $("#liveClock").textContent=fmtClock(now);
   $("#ptClock").textContent=PT_FMT.format(now);
   const off=nowOffset();
-  $("#elapsed").textContent= off!=null? fmtOff(off) : "-:--";
-  // per-card countdown to target start + lateness highlight
+  $("#elapsed").textContent= off!=null? fmtOff(off):"-:--";
   $$(".card").forEach(card=>{
     const s=stepById(card.dataset.id); if(!s)return;
-    const cd=card.querySelector("[data-cd]");
-    card.classList.remove("late");
-    if(s.status==="done"){ if(cd){cd.textContent="✓";cd.className="cd ok";} return; }
+    const cd=card.querySelector("[data-cd]"); card.classList.remove("late");
+    if(s.status==="done"){ if(cd){cd.textContent="完了";cd.className="cd ok";} return; }
     if(off==null){ if(cd){cd.textContent="";cd.className="cd";} return; }
-    const remain=s.tStart-off; // minutes until target start
-    const overEnd=off-(s.tStart+(s.tDur||0));
+    const remain=s.tStart-off, overEnd=off-(s.tStart+(s.tDur||0));
     if(cd){
       if(remain>0){cd.textContent="開始まで "+fmtOff(remain);cd.className="cd "+(remain<=2?"warn":"ok");}
       else if(overEnd<0){cd.textContent="進行中 残"+fmtOff(-overEnd);cd.className="cd warn";}
       else{cd.textContent="超過 "+fmtOff(overEnd);cd.className="cd bad";}
     }
-    if(s.status!=="blocked" && overEnd>0) card.classList.add("late");
+    if(overEnd>0) card.classList.add("late");
   });
 }
 
@@ -619,47 +474,23 @@ $("#evtName").value=DB.event||"";
 $("#evtName").oninput=e=>{DB.event=e.target.value;save();};
 const t0input=$("#t0");
 if(DB.t0){const d=new Date(DB.t0);t0input.value=pad(d.getHours())+":"+pad(d.getMinutes());}
-t0input.onchange=()=>{ if(!t0input.value){DB.t0=null;save();render();return;} const[h,m]=t0input.value.split(":").map(Number); const d=new Date();d.setHours(h,m,0,0);DB.t0=d.toISOString();save();render(); };
+t0input.onchange=()=>{ if(!t0input.value){DB.t0=null;save();render();return;} const[h,m]=t0input.value.split(":").map(Number);const d=new Date();d.setHours(h,m,0,0);DB.t0=d.toISOString();save();render(); };
 $("#t0now").onclick=()=>{const d=new Date();d.setSeconds(0,0);DB.t0=d.toISOString();t0input.value=fmtHM(d);save();render();};
-
-function addStep(atEnd){
-  const maxT=DB.steps.length?Math.max(...DB.steps.map(s=>s.tStart)):0;
-  const s={id:newId(),title:"新規ステップ",owner:"未割当",tStart:maxT,tDur:10,aStart:null,aDur:null,status:"todo",deps:[],rec:"",subs:[{title:"サブタスク",done:false,detail:""}]};
-  DB.steps.push(s);save();render();setTimeout(()=>jumpTo(s.id),60);
-}
-$("#addStep").onclick=()=>addStep();
-$("#addStepBottom").onclick=()=>addStep();
-
-$("#wireToggle").onchange=e=>{wires.classList.toggle("hide",!e.target.checked);};
+$("#addRow").onclick=addRow; $("#addRowBottom").onclick=addRow;
 $("#resetBtn").onclick=()=>{if(confirm("初期テンプレート（CSVベース）に戻します。現在の内容は失われます。")){DB=template();save();location.reload();}};
 $("#exportBtn").onclick=()=>{const blob=new Blob([JSON.stringify(DB,null,2)],{type:"application/json"});const a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download=(DB.event||"event")+"-ops-"+fmtClock(new Date()).replace(/:/g,"")+".json";a.click();};
 $("#importBtn").onclick=()=>$("#importFile").click();
 $("#importFile").onchange=e=>{const f=e.target.files[0];if(!f)return;const r=new FileReader();r.onload=()=>{try{DB=JSON.parse(r.result);save();location.reload();}catch(err){alert("読み込み失敗: "+err.message);}};r.readAsText(f);};
 
-// --- sync modal wiring ---
+// sync modal
 const syncModal=$("#syncModal");
-$("#syncBtn").onclick=()=>{
-  const saved=JSON.parse(localStorage.getItem(SYNC_KEY)||"null");
-  if(saved){ $("#fbConfig").value=JSON.stringify(saved.config,null,2); $("#fbRoom").value=saved.room; }
-  setSyncStatus(SYNC.on?("同期中: "+SYNC.room):"未接続");
-  syncModal.classList.add("show");
-};
+$("#syncBtn").onclick=()=>{const saved=JSON.parse(localStorage.getItem(SYNC_KEY)||"null");if(saved){$("#fbConfig").value=JSON.stringify(saved.config,null,2);$("#fbRoom").value=saved.room;}setSyncStatus(SYNC.on?("同期中: "+SYNC.room):"未接続");syncModal.classList.add("show");};
 $("#syncClose").onclick=()=>syncModal.classList.remove("show");
-syncModal.onclick=e=>{ if(e.target===syncModal) syncModal.classList.remove("show"); };
-$("#syncConnect").onclick=()=>{
-  let cfg; try{ cfg=JSON.parse($("#fbConfig").value); }catch(e){ setSyncStatus("設定JSONが不正: "+e.message); return; }
-  const room=($("#fbRoom").value||"").trim(); if(!room){ setSyncStatus("ルームIDを入力してください"); return; }
-  if(!cfg.databaseURL){ setSyncStatus("databaseURL が設定に含まれていません"); return; }
-  syncConnect(cfg,room);
-};
+syncModal.onclick=e=>{if(e.target===syncModal)syncModal.classList.remove("show");};
+$("#syncConnect").onclick=()=>{let cfg;try{cfg=JSON.parse($("#fbConfig").value);}catch(e){setSyncStatus("設定JSONが不正: "+e.message);return;}const room=($("#fbRoom").value||"").trim();if(!room){setSyncStatus("ルームIDを入力してください");return;}if(!cfg.databaseURL){setSyncStatus("databaseURL が設定に含まれていません");return;}syncConnect(cfg,room);};
 $("#syncDisconnect").onclick=()=>syncDisconnect();
-
-// auto-connect if previously configured
-(function(){ const saved=JSON.parse(localStorage.getItem(SYNC_KEY)||"null"); if(saved&&saved.config&&saved.room) syncConnect(saved.config,saved.room); })();
+(function(){const saved=JSON.parse(localStorage.getItem(SYNC_KEY)||"null");if(saved&&saved.config&&saved.room)syncConnect(saved.config,saved.room);})();
 setSyncUI();
-
-window.addEventListener("resize",()=>requestAnimationFrame(drawWires));
-$("#board").addEventListener("scroll",()=>requestAnimationFrame(drawWires));
 
 render();
 setInterval(tick,1000);
