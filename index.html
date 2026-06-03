@@ -80,53 +80,63 @@
   .card.flash{animation:fl 1.1s ease}
   @keyframes fl{0%{box-shadow:0 0 0 0 rgba(168,124,79,.5)}100%{box-shadow:0 0 0 14px rgba(168,124,79,0)}}
 
-  .chead{display:flex;align-items:center;gap:12px;flex-wrap:wrap;padding:11px 14px;border-bottom:1px solid var(--line2)}
-  .statusdot{flex:0 0 auto;width:13px;height:13px;border-radius:50%;background:var(--todo)}
+  /* ---------- 列を揃える表レイアウト ---------- */
+  /* status | id | タスク | 担当 | 目標 | 実績 | 開始/終了 | 状況・操作 */
+  .cols,.chead{display:grid;grid-template-columns:14px 42px minmax(150px,1fr) 138px 64px 150px 90px 116px;align-items:center;gap:10px}
+  .cols{position:sticky;top:0;z-index:6;background:#e7dbc3;border:1px solid var(--line);border-radius:10px;padding:8px 14px;margin-bottom:8px;font-size:10.5px;font-weight:800;color:#82745d;letter-spacing:.3px}
+  .cols span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+
+  .chead{padding:10px 14px;border-bottom:1px solid var(--line2)}
+  .statusdot{width:13px;height:13px;border-radius:50%;background:var(--todo);justify-self:center}
   .card.st-doing .statusdot{background:var(--doing);box-shadow:0 0 0 3px #f0e0c6}
   .card.st-done .statusdot{background:var(--done)}
-  .id{font-variant-numeric:tabular-nums;font-size:10.5px;font-weight:800;color:#fff;background:#9c8a6c;border-radius:5px;padding:2px 7px;flex:0 0 auto}
-  .title{font-weight:800;font-size:14.5px;line-height:1.3;flex:1 1 220px;min-width:160px;outline:none}
+  .id{font-variant-numeric:tabular-nums;font-size:10.5px;font-weight:800;color:#fff;background:#9c8a6c;border-radius:5px;padding:2px 6px;text-align:center}
+  .title{font-weight:800;font-size:14px;line-height:1.3;outline:none;min-width:0;overflow-wrap:anywhere}
   .title:focus{background:var(--brand-weak);border-radius:5px}
 
-  .owner{display:inline-flex;align-items:center;gap:7px;border:1.5px solid var(--oc);border-radius:22px;padding:3px 10px 3px 3px;background:#fffdf7;flex:0 0 auto}
-  .owner .ava{width:24px;height:24px;border-radius:50%;background:var(--oc);color:#fff;display:grid;place-items:center;font-size:12px;font-weight:800}
-  .owner select{border:none;background:transparent;font-weight:800;font-size:13px;color:var(--ink);cursor:pointer}
+  .owner{display:inline-flex;align-items:center;gap:7px;border:1.5px solid var(--oc);border-radius:22px;padding:2px 8px 2px 2px;background:#fffdf7;min-width:0}
+  .owner .ava{width:22px;height:22px;border-radius:50%;background:var(--oc);color:#fff;display:grid;place-items:center;font-size:11px;font-weight:800;flex:0 0 auto}
+  .owner select{border:none;background:transparent;font-weight:800;font-size:12.5px;color:var(--ink);cursor:pointer;min-width:0;max-width:96px}
 
-  .plan{display:flex;align-items:center;gap:6px;background:#f3ecdd;border-radius:9px;padding:5px 9px;font-size:11.5px}
-  .plan.act{background:#eef0e2}
-  .plan .k{color:var(--sub);font-weight:800;font-size:10px;letter-spacing:.3px}
-  .plan b{font-variant-numeric:tabular-nums;font-weight:800}
-  .plan input{border:1px solid var(--line);border-radius:6px;padding:2px 4px;text-align:center;font-variant-numeric:tabular-nums;background:#fffdf7}
-  .plan input.t{width:44px} .plan input.d{width:34px}
-  .plan .u{color:var(--sub);font-size:10px}
+  .goal{font-size:11.5px;text-align:center}
+  .goal input{width:34px;border:1px solid var(--line);border-radius:6px;padding:2px 3px;text-align:center;font-variant-numeric:tabular-nums;background:#fffdf7}
+  .goal .u{color:var(--sub);font-size:10px}
 
-  .startbtn{flex:0 0 auto;border-radius:10px;padding:8px 16px;font-size:13px;font-weight:800;border:1.5px solid var(--doing);color:var(--doing);background:#fffdf7}
+  .act{display:flex;align-items:center;gap:3px;font-size:11px;justify-content:center}
+  .act input{width:46px;border:1px solid var(--line);border-radius:6px;padding:2px 3px;text-align:center;font-variant-numeric:tabular-nums;background:#fffdf7}
+  .act .u{color:var(--sub);font-size:11px}
+  .act b{font-variant-numeric:tabular-nums;font-weight:800;font-size:10.5px;color:var(--sub)}
+
+  .startbtn{border-radius:9px;padding:7px 0;width:100%;font-size:12.5px;font-weight:800;border:1.5px solid var(--doing);color:var(--doing);background:#fffdf7}
   .startbtn:hover{background:#fff}
   .startbtn.run{background:var(--doing);color:#fff;border-color:var(--doing)}
   .startbtn.fin{background:var(--done);color:#fff;border-color:var(--done);cursor:default}
-  .undo{flex:0 0 auto;color:#bdb09a;font-size:14px;padding:4px 6px} .undo:hover{color:var(--ink)}
-  .cd{flex:0 0 auto;font-variant-numeric:tabular-nums;font-weight:800;font-size:11.5px;min-width:96px;text-align:right}
-  .cd.ok{color:var(--done)} .cd.warn{color:var(--doing)} .cd.bad{color:var(--late)}
-  .del{flex:0 0 auto;color:#c2b59c;font-size:14px;padding:2px 4px} .del:hover{color:var(--late)}
 
-  /* subtasks — 常時表示・横グリッド */
-  .subs{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:8px;padding:11px 14px}
-  .sub{border:1px solid var(--line2);border-radius:10px;padding:8px 9px;background:#fffdf7}
+  .ops{display:flex;align-items:center;gap:3px;justify-content:flex-end}
+  .cd{font-variant-numeric:tabular-nums;font-weight:800;font-size:10px;text-align:right;flex:1;min-width:0}
+  .cd.ok{color:var(--done)} .cd.warn{color:var(--doing)} .cd.bad{color:var(--late)}
+  .undo{color:#bdb09a;font-size:13px;padding:2px 4px} .undo:hover{color:var(--ink)}
+  .del{color:#c2b59c;font-size:13px;padding:2px 3px} .del:hover{color:var(--late)}
+
+  /* subtasks — 各ステップ直下に縦リスト(常時表示) */
+  .subs{padding:6px 14px 10px 66px}
+  .sub{padding:5px 0;border-top:1px solid var(--line2)}
+  .sub:first-child{border-top:none}
   .sub .srow{display:flex;gap:8px;align-items:flex-start}
-  .sub .scheck{flex:0 0 auto;width:19px;height:19px;border:2px solid #d8ccb2;border-radius:6px;display:grid;place-items:center;font-size:12px;color:#fff;background:#fff;margin-top:1px}
+  .sub .scheck{flex:0 0 auto;width:18px;height:18px;border:2px solid #d8ccb2;border-radius:6px;display:grid;place-items:center;font-size:11px;color:#fff;background:#fff;margin-top:1px}
   .sub .scheck.on{background:var(--done);border-color:var(--done)}
-  .sub .stitle{flex:1;font-weight:700;font-size:12.5px;line-height:1.35;outline:none}
+  .sub .stitle{flex:1;font-weight:700;font-size:12.5px;line-height:1.35;outline:none;min-width:0}
   .sub.done .stitle{text-decoration:line-through;color:var(--sub)}
   .sub .delx{flex:0 0 auto;color:#c2b59c;font-size:11px;padding:0 2px;opacity:0}
   .sub:hover .delx{opacity:1}
   .sub .delx:hover{color:var(--late)}
-  .sub .detail{margin-top:6px;position:relative}
-  .sub .detail textarea{width:100%;border:1px dashed var(--line);border-radius:7px;background:#fcf8f0;padding:6px 8px;font-size:11.5px;line-height:1.5;resize:vertical;min-height:30px;outline:none;white-space:pre-wrap}
+  .sub .detail{margin:4px 0 0 26px;position:relative}
+  .sub .detail textarea{width:100%;border:1px dashed var(--line);border-radius:7px;background:#fcf8f0;padding:5px 8px;font-size:11.5px;line-height:1.5;resize:none;overflow:hidden;min-height:0;outline:none;white-space:pre-wrap}
   .sub .detail .copy{position:absolute;top:4px;right:5px;font-size:10px;border:1px solid var(--line);background:#fff;border-radius:6px;padding:1px 7px;font-weight:700;color:var(--sub)}
   .sub .detail .links{margin-top:4px;display:flex;flex-direction:column;gap:3px}
   .sub .detail .links a{font-size:11px;color:var(--brand);word-break:break-all}
-  .addsub{grid-column:1/-1}
-  .addsub button{width:100%;font-size:11.5px;color:var(--sub);border:1px dashed var(--line);border-radius:8px;padding:6px;font-weight:700;background:transparent}
+  .addsub{margin-top:6px}
+  .addsub button{font-size:11.5px;color:var(--sub);border:1px dashed var(--line);border-radius:8px;padding:4px 12px;font-weight:700;background:transparent}
   .addsub button:hover{background:#fffdf7;color:var(--ink)}
 
   .addrow{margin:16px 0 0}
@@ -150,10 +160,14 @@
   .modal .mf{padding:14px 18px;border-top:1px solid var(--line);display:flex;gap:8px;align-items:center}
   .modal .mf .st{font-size:11.5px;color:var(--sub);margin-right:auto}
 
-  @media (max-width:640px){
+  @media (max-width:860px){
     .clocks{margin-left:0;gap:12px}
-    .chead{gap:8px}
-    .cd{min-width:auto}
+    .cols{display:none}
+    .chead{display:flex;flex-wrap:wrap;gap:8px 10px}
+    .title{flex:1 1 100%}
+    .startbtn{width:auto;padding:7px 16px}
+    .ops{margin-left:auto}
+    .subs{padding-left:14px}
   }
 </style>
 <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
@@ -276,6 +290,11 @@ const openState=null; // (詳細は常時表示)
 function render(){
   const board=$("#board"); const sTop=board?board.scrollTop:0;
   timeline.innerHTML="";
+  // 固定の列見出し（どこを見るかを明示）
+  const cols=document.createElement("div");
+  cols.className="cols";
+  cols.innerHTML=`<span></span><span>ID</span><span>タスク</span><span>担当</span><span>目標</span><span>実績 開始→終了</span><span>記録</span><span class="r">状況</span>`;
+  timeline.appendChild(cols);
   const times=allTimes();
   const off=nowOffset();
   times.forEach((t,i)=>{
@@ -301,8 +320,11 @@ function render(){
     timeline.appendChild(wrap);
   });
   renderProgress();
+  autosizeAll();
   if(board)board.scrollTop=sTop;
 }
+function autosize(ta){ ta.style.height="auto"; ta.style.height=Math.max(28,ta.scrollHeight)+"px"; }
+function autosizeAll(){ $$(".sub .detail textarea",timeline).forEach(autosize); }
 
 function ownerSelect(s){
   const names=Object.keys(DB.owners);
@@ -325,12 +347,10 @@ function cardEl(s){
      <span class="id">${escapeHtml(s.id)}</span>
      <span class="title" contenteditable="true" spellcheck="false">${escapeHtml(s.title)}</span>
      ${ownerSelect(s)}
-     <span class="plan"><span class="k">目標</span><b>基準+${fmtOff(s.tStart)}</b><span class="u">/</span><input class="d tdur" value="${s.tDur??""}"><span class="u">分</span></span>
-     <span class="plan act"><span class="k">実績</span><input class="t astart" value="${s.aStart!=null?fmtOff(s.aStart):""}" placeholder="-:--" title="実績開始(手修正可)"><span class="u">→</span><input class="t aend" value="${s.aEnd!=null?fmtOff(s.aEnd):""}" placeholder="-:--" title="実績終了(手修正可)"><b style="margin-left:4px">${aDur!=null?aDur+"分":""}</b></span>
+     <span class="goal"><input class="tdur" value="${s.tDur??""}" title="所要(分)"><span class="u">分</span></span>
+     <span class="act"><input class="astart" value="${s.aStart!=null?fmtOff(s.aStart):""}" placeholder="-:--" title="実績開始(手修正可)"><span class="u">→</span><input class="aend" value="${s.aEnd!=null?fmtOff(s.aEnd):""}" placeholder="-:--" title="実績終了(手修正可)"><b>${aDur!=null?aDur+"分":""}</b></span>
      <button class="startbtn ${startClass(s)}">${startLabel(s)}</button>
-     <button class="undo" title="1つ戻す（押し間違え修正）">↺</button>
-     <span class="cd" data-cd></span>
-     <button class="del" title="ステップ削除">🗑</button>
+     <span class="ops"><span class="cd" data-cd></span><button class="undo" title="1つ戻す（押し間違え修正）">↺</button><button class="del" title="ステップ削除">🗑</button></span>
    </div>
    <div class="subs">${subsHtml}<div class="addsub"><button>＋ サブタスク</button></div></div>`;
 
@@ -373,7 +393,7 @@ function bindSub(s,li,i){
     renderProgress();
   };
   const t=li.querySelector(".stitle"); t.onblur=()=>{sub.title=t.textContent.trim();save();};
-  const ta=li.querySelector(".detail textarea"); ta.oninput=()=>{sub.detail=ta.value;save();};
+  const ta=li.querySelector(".detail textarea"); ta.oninput=()=>{sub.detail=ta.value;autosize(ta);save();};
   li.querySelector(".copy").onclick=()=>{navigator.clipboard?.writeText(sub.detail||"");const b=li.querySelector(".copy");b.textContent="✓";setTimeout(()=>b.textContent="コピー",900);};
   li.querySelector(".delx").onclick=()=>{s.subs.splice(i,1);save();render();};
 }
