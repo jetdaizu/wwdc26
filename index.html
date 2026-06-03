@@ -6,12 +6,12 @@
 <title>WWDC Video Ops — 即時投稿ランブック</title>
 <style>
   :root{
-    --bg:#f4f6f9; --panel:#fff; --ink:#1b2330; --sub:#69727f; --line:#e5e8ee; --line2:#eef1f5;
+    --bg:#eef1f7; --panel:#fff; --ink:#1b2330; --sub:#69727f; --line:#e4e8f0; --line2:#eef1f6;
     --brand:#2563eb; --brand-weak:#eaf1ff;
     --todo:#9aa3af; --doing:#2563eb; --done:#16a34a; --blocked:#dc2626; --late:#d97706;
     --ok:#16a34a; --warn:#d97706; --bad:#dc2626;
-    --shadow:0 1px 2px rgba(16,24,40,.06),0 1px 3px rgba(16,24,40,.08);
-    --radius:12px;
+    --shadow:0 1px 2px rgba(16,24,40,.04),0 4px 12px rgba(16,24,40,.06);
+    --radius:14px;
   }
   *{box-sizing:border-box}
   html,body{margin:0;height:100%}
@@ -78,8 +78,8 @@
   .slot .steps{flex:1;display:flex;gap:14px;flex-wrap:wrap;align-items:flex-start;padding-bottom:14px}
 
   /* ---------- step card ---------- */
-  .card{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow);width:340px;flex:0 0 340px;position:relative;transition:box-shadow .12s}
-  .card:hover{box-shadow:0 4px 16px rgba(16,24,40,.12)}
+  .card{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow);width:340px;flex:0 0 340px;position:relative;transition:box-shadow .14s,transform .14s}
+  .card:hover{box-shadow:0 8px 24px rgba(16,24,40,.12);transform:translateY(-1px)}
   .card .hd{display:flex;align-items:flex-start;gap:9px;padding:11px 12px 9px;border-bottom:1px solid var(--line2)}
   .card .chk{flex:0 0 auto;width:22px;height:22px;border:2px solid var(--line);border-radius:7px;display:grid;place-items:center;font-size:14px;color:#fff;background:#fff;margin-top:1px}
   .card .chk.on{background:var(--done);border-color:var(--done)}
@@ -159,19 +159,57 @@
   @media (max-width:560px){
     .card{width:300px;flex-basis:300px}
     .slot .rail{flex-basis:54px}
-    .clock{margin-left:0}
+    .clocks{margin-left:0;gap:12px}
   }
+
+  /* ---------- modern header (dark) ---------- */
+  header.dark{background:linear-gradient(135deg,#0e1530 0%,#1b2550 60%,#222e63 100%);color:#fff;border-bottom:none;box-shadow:0 1px 0 rgba(255,255,255,.06)}
+  header.dark .brand small{color:#9fb0d6}
+  header.dark .fld label{color:#9fb0d6}
+  header.dark .fld input{background:rgba(255,255,255,.10);border:1px solid rgba(255,255,255,.16);color:#fff}
+  header.dark .fld input::placeholder{color:#aeb9d6}
+  header.dark .fld input[type=time]{color-scheme:dark}
+  .btn-ghost{border:1px solid rgba(255,255,255,.22);background:rgba(255,255,255,.10);color:#fff;border-radius:8px;padding:6px 10px;font-size:12.5px;font-weight:700}
+  .btn-ghost:hover{background:rgba(255,255,255,.18)}
+  .clocks{margin-left:auto;display:flex;gap:20px;align-items:flex-start}
+  .ck{text-align:right}
+  .ck .lab{display:block;font-size:10px;color:#9fb0d6;letter-spacing:.3px;margin-bottom:1px}
+  .ck .v{font-variant-numeric:tabular-nums;font-weight:800;font-size:15px}
+  .ck.elc .v{color:#7db4ff}
+
+  /* ---------- sync chip + modal ---------- */
+  .syncchip{display:inline-flex;align-items:center;gap:6px;border:1px solid var(--line);background:#fff;border-radius:20px;padding:5px 11px;font-size:11.5px;font-weight:700;color:var(--sub);box-shadow:var(--shadow)}
+  .syncchip .d{width:8px;height:8px;border-radius:50%;background:#cbd5e1}
+  .syncchip.on .d{background:#16a34a;box-shadow:0 0 0 3px #d6f5e0}
+  .syncchip.on{color:#15803d}
+
+  .modal{position:fixed;inset:0;background:rgba(13,18,33,.5);display:none;align-items:center;justify-content:center;z-index:50;padding:20px;backdrop-filter:blur(2px)}
+  .modal.show{display:flex}
+  .modal .box{background:#fff;border-radius:16px;width:min(520px,100%);box-shadow:0 20px 60px rgba(0,0,0,.3);overflow:hidden}
+  .modal .mh{padding:16px 18px;border-bottom:1px solid var(--line);display:flex;align-items:center;gap:8px}
+  .modal .mh b{font-size:15px} .modal .mh .close{margin-left:auto;color:var(--sub);font-size:18px}
+  .modal .mb{padding:16px 18px;display:flex;flex-direction:column;gap:12px}
+  .modal label{font-size:11.5px;font-weight:700;color:var(--sub);display:block;margin-bottom:4px}
+  .modal textarea,.modal input{width:100%;border:1px solid var(--line);border-radius:9px;padding:9px 10px;font-size:12.5px;background:#fbfcfe}
+  .modal textarea{min-height:120px;resize:vertical;font-family:ui-monospace,Menlo,Consolas,monospace}
+  .modal .hint{font-size:11px;color:var(--sub);line-height:1.6}
+  .modal .hint code{background:#f1f4f8;border-radius:4px;padding:1px 5px}
+  .modal .mf{padding:14px 18px;border-top:1px solid var(--line);display:flex;gap:8px;align-items:center}
+  .modal .mf .st{font-size:11.5px;color:var(--sub);margin-right:auto}
 </style>
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-database-compat.js"></script>
 </head>
 <body>
 
-<header>
+<header class="dark">
   <div class="brand"><span class="dot"></span><div><b>WWDC Video Ops</b><small>即時投稿ランブック</small></div></div>
   <div class="fld"><label>イベント</label><input class="name" id="evtName" placeholder="WWDC26" /></div>
-  <div class="fld"><label>基準時刻 0:00</label><input type="time" id="t0" step="60" /><button class="btn" id="t0now" title="今を基準(0:00)に">今</button></div>
-  <div class="clock">
-    <span class="now" id="liveClock">--:--:--</span>
-    <small>現在 / 経過 <span class="el" id="elapsed">-:--</span></small>
+  <div class="fld"><label>基準時刻 0:00</label><input type="time" id="t0" step="60" /><button class="btn-ghost" id="t0now" title="今を基準(0:00)に">今</button></div>
+  <div class="clocks">
+    <div class="ck"><span class="lab">現地</span><span class="v" id="liveClock">--:--:--</span></div>
+    <div class="ck"><span class="lab">🍎 Cupertino (PT)</span><span class="v" id="ptClock">--:--:--</span></div>
+    <div class="ck elc"><span class="lab">経過</span><span class="v" id="elapsed">-:--</span></div>
   </div>
 </header>
 
@@ -180,6 +218,7 @@
   <label class="switch"><input type="checkbox" id="wireToggle" checked /> 依存矢印</label>
   <div class="progress"><span id="progTxt">0/0</span><span class="bar"><i id="progBar"></i></span></div>
   <div class="spacer"></div>
+  <button class="syncchip" id="syncBtn"><span class="d"></span><span id="syncLabel">未接続</span></button>
   <button class="btn" id="exportBtn">⬇ 書出</button>
   <button class="btn" id="importBtn">⬆ 読込</button>
   <input type="file" id="importFile" accept="application/json" style="display:none" />
@@ -204,7 +243,38 @@
   <div class="addstep"><button id="addStepBottom">＋ 末尾にステップ</button></div>
 </div>
 
-<footer>Waterfall（時刻順）＋依存矢印 / ローカル保存。チーム共有は「書出」→共有→「読込」。基準時刻=イベント開始（または任意の0:00）。</footer>
+<div class="modal" id="syncModal">
+  <div class="box">
+    <div class="mh"><span>🔗</span><b>チーム同期（Firebase）</b><button class="close" id="syncClose">✕</button></div>
+    <div class="mb">
+      <div>
+        <label>Firebase ウェブ設定（firebaseConfig の JSON）</label>
+        <textarea id="fbConfig" placeholder='{
+  "apiKey": "…",
+  "authDomain": "xxx.firebaseapp.com",
+  "databaseURL": "https://xxx-default-rtdb.firebaseio.com",
+  "projectId": "xxx",
+  "appId": "…"
+}'></textarea>
+      </div>
+      <div>
+        <label>ルームID（チームで同じ文字列を共有）</label>
+        <input id="fbRoom" placeholder="wwdc26" />
+      </div>
+      <div class="hint">
+        ① Firebase コンソールで <b>Realtime Database</b> を作成 → ② プロジェクト設定の「ウェブアプリ」から <code>firebaseConfig</code> をコピーして上に貼付 → ③ 同じ <b>ルームID</b> をチーム全員で使うと、チェックや編集がリアルタイムに同期します。<br>
+        最初に接続した人の内容が共有され、以後は全員で共同編集（最新の変更が反映）。設定はこのブラウザに保存されます。
+      </div>
+    </div>
+    <div class="mf">
+      <span class="st" id="syncStatus">未接続</span>
+      <button class="btn warnbtn" id="syncDisconnect">切断</button>
+      <button class="btn primary" id="syncConnect">接続</button>
+    </div>
+  </div>
+</div>
+
+<footer>Waterfall（時刻順）＋依存矢印 / リアルタイム同期（Firebase）対応。基準時刻=イベント開始（または任意の0:00）。</footer>
 
 <script>
 "use strict";
@@ -249,7 +319,8 @@ function template(){
 const KEY="wwdc-ops-v2";
 let DB=load();
 function load(){ try{const s=localStorage.getItem(KEY); if(s){const d=JSON.parse(s); if(!d.owners)d.owners=Object.assign({},OWNER_COLORS); return d;}}catch(e){} return template(); }
-function save(){ try{localStorage.setItem(KEY,JSON.stringify(DB));}catch(e){} }
+function saveLocal(){ try{localStorage.setItem(KEY,JSON.stringify(DB));}catch(e){} }
+function save(){ saveLocal(); scheduleRemotePush(); }
 
 /* ============ helpers ============ */
 const $=(s,el=document)=>el.querySelector(s);
@@ -476,10 +547,53 @@ function drawWires(){
   });
 }
 
+/* ============ Firebase realtime sync ============ */
+const SYNC_KEY="wwdc-ops-sync";
+const SYNC={on:false,room:null,clientId:Math.random().toString(36).slice(2),ref:null,applying:false,timer:null};
+function nowHMS(){return fmtClock(new Date());}
+function setSyncUI(){
+  const chip=$("#syncBtn");
+  chip.classList.toggle("on",SYNC.on);
+  $("#syncLabel").textContent=SYNC.on?("同期: "+SYNC.room):"未接続";
+}
+function setSyncStatus(t){ const e=$("#syncStatus"); if(e)e.textContent=t; }
+
+function scheduleRemotePush(){ if(!SYNC.on||SYNC.applying)return; clearTimeout(SYNC.timer); SYNC.timer=setTimeout(pushRemote,400); }
+function pushRemote(){
+  if(!SYNC.on||!SYNC.ref)return;
+  SYNC.ref.set({data:DB,updatedAt:Date.now(),by:SYNC.clientId})
+    .then(()=>setSyncStatus("同期済 "+nowHMS()))
+    .catch(e=>setSyncStatus("書込失敗: "+e.message));
+}
+function syncConnect(config,room){
+  if(typeof firebase==="undefined"){ setSyncStatus("Firebase SDK未読込（オフライン）"); return; }
+  try{ if(!firebase.apps.length) firebase.initializeApp(config); }catch(e){ setSyncStatus("設定エラー: "+e.message); return; }
+  let db; try{ db=firebase.database(); }catch(e){ setSyncStatus("databaseURL を確認してください"); return; }
+  if(SYNC.ref) SYNC.ref.off();
+  SYNC.ref=db.ref("rooms/"+room); SYNC.room=room; SYNC.on=true;
+  localStorage.setItem(SYNC_KEY,JSON.stringify({config,room}));
+  SYNC.ref.on("value",snap=>{
+    const v=snap.val();
+    if(!v||!v.data){ pushRemote(); return; }      // 空ルーム→ローカルを共有
+    if(v.by===SYNC.clientId) return;               // 自分の書込のエコーは無視
+    SYNC.applying=true; DB=v.data; saveLocal(); SYNC.applying=false;
+    syncFormFromDB(); render();
+    setSyncStatus("更新受信 "+nowHMS());
+  },err=>setSyncStatus("接続失敗: "+err.message));
+  setSyncUI(); setSyncStatus("接続中: "+room);
+}
+function syncDisconnect(){ if(SYNC.ref)SYNC.ref.off(); SYNC.on=false; SYNC.ref=null; localStorage.removeItem(SYNC_KEY); setSyncUI(); setSyncStatus("未接続"); }
+function syncFormFromDB(){ // リモート受信時にヘッダー入力欄も追従
+  $("#evtName").value=DB.event||"";
+  if(DB.t0){const d=new Date(DB.t0);$("#t0").value=pad(d.getHours())+":"+pad(d.getMinutes());} else $("#t0").value="";
+}
+
 /* ============ live tick ============ */
+const PT_FMT=new Intl.DateTimeFormat("en-US",{timeZone:"America/Los_Angeles",hour:"2-digit",minute:"2-digit",second:"2-digit",hour12:false});
 function tick(){
   const now=new Date();
   $("#liveClock").textContent=fmtClock(now);
+  $("#ptClock").textContent=PT_FMT.format(now);
   const off=nowOffset();
   $("#elapsed").textContent= off!=null? fmtOff(off) : "-:--";
   // per-card countdown to target start + lateness highlight
@@ -521,6 +635,28 @@ $("#resetBtn").onclick=()=>{if(confirm("初期テンプレート（CSVベース�
 $("#exportBtn").onclick=()=>{const blob=new Blob([JSON.stringify(DB,null,2)],{type:"application/json"});const a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download=(DB.event||"event")+"-ops-"+fmtClock(new Date()).replace(/:/g,"")+".json";a.click();};
 $("#importBtn").onclick=()=>$("#importFile").click();
 $("#importFile").onchange=e=>{const f=e.target.files[0];if(!f)return;const r=new FileReader();r.onload=()=>{try{DB=JSON.parse(r.result);save();location.reload();}catch(err){alert("読み込み失敗: "+err.message);}};r.readAsText(f);};
+
+// --- sync modal wiring ---
+const syncModal=$("#syncModal");
+$("#syncBtn").onclick=()=>{
+  const saved=JSON.parse(localStorage.getItem(SYNC_KEY)||"null");
+  if(saved){ $("#fbConfig").value=JSON.stringify(saved.config,null,2); $("#fbRoom").value=saved.room; }
+  setSyncStatus(SYNC.on?("同期中: "+SYNC.room):"未接続");
+  syncModal.classList.add("show");
+};
+$("#syncClose").onclick=()=>syncModal.classList.remove("show");
+syncModal.onclick=e=>{ if(e.target===syncModal) syncModal.classList.remove("show"); };
+$("#syncConnect").onclick=()=>{
+  let cfg; try{ cfg=JSON.parse($("#fbConfig").value); }catch(e){ setSyncStatus("設定JSONが不正: "+e.message); return; }
+  const room=($("#fbRoom").value||"").trim(); if(!room){ setSyncStatus("ルームIDを入力してください"); return; }
+  if(!cfg.databaseURL){ setSyncStatus("databaseURL が設定に含まれていません"); return; }
+  syncConnect(cfg,room);
+};
+$("#syncDisconnect").onclick=()=>syncDisconnect();
+
+// auto-connect if previously configured
+(function(){ const saved=JSON.parse(localStorage.getItem(SYNC_KEY)||"null"); if(saved&&saved.config&&saved.room) syncConnect(saved.config,saved.room); })();
+setSyncUI();
 
 window.addEventListener("resize",()=>requestAnimationFrame(drawWires));
 $("#board").addEventListener("scroll",()=>requestAnimationFrame(drawWires));
