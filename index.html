@@ -271,8 +271,10 @@ function nowOffset(){const t0=getT0(); return t0?Math.round((Date.now()-t0.getTi
 
 /* ============ render ============ */
 const timeline=$("#timeline"), wires=$("#wires");
+const openSubs=new Set(); // 展開中サブタスクの開閉状態を再描画間で保持
 
 function render(){
+  const board=$("#board"); const sTop=board?board.scrollTop:0, sLeft=board?board.scrollLeft:0;
   $$(".slot",timeline).forEach(n=>n.remove());
   const steps=[...DB.steps].sort((a,b)=>(a.tStart-b.tStart)||a.id.localeCompare(b.id));
   // group by tStart
@@ -291,6 +293,7 @@ function render(){
   });
   timeline.appendChild(wires);
   renderAlert(); renderProgress();
+  if(board){board.scrollTop=sTop;board.scrollLeft=sLeft;} // スクロール位置を維持（トップに飛ばない）
   requestAnimationFrame(drawWires);
 }
 
@@ -377,7 +380,7 @@ function subHtml(s,sub,i){
   const links=extractLinks(sub.detail);
   const linkHtml=links.length?`<div class="links">${links.map(u=>`<a href="${escapeHtml(u)}" target="_blank" rel="noopener">🔗 ${escapeHtml(u)}</a>`).join("")}</div>`:"";
   const hasDetail=(sub.detail||"").trim()!=="";
-  return `<li class="sub ${sub.done?"done":""}" data-i="${i}">
+  return `<li class="sub ${sub.done?"done":""} ${openSubs.has(s.id+":"+i)?"open":""}" data-i="${i}">
     <div class="srow">
       <button class="scheck ${sub.done?"on":""}">${sub.done?"✓":""}</button>
       <div class="stext"><span class="stitle" contenteditable="true" spellcheck="false">${escapeHtml(sub.title)}</span></div>
@@ -394,10 +397,16 @@ function subHtml(s,sub,i){
 
 function bindSub(s,li,i){
   const sub=s.subs[i];
-  li.querySelector(".scheck").onclick=()=>{sub.done=!sub.done;save();render();};
+  li.querySelector(".scheck").onclick=()=>{ // 局所更新：再描画せずチェックだけ反映（スクロール/編集中を維持）
+    sub.done=!sub.done; save();
+    li.classList.toggle("done",sub.done);
+    const c=li.querySelector(".scheck"); c.classList.toggle("on",sub.done); c.textContent=sub.done?"✓":"";
+    const card=li.closest(".card"); const st=stepById(card.dataset.id);
+    card.querySelector(".prog").textContent=st.subs.filter(x=>x.done).length+"/"+st.subs.length;
+    renderProgress();
+  };
   const t=li.querySelector(".stitle"); t.onblur=()=>{sub.title=t.textContent.trim();save();};
-  const exp=li.querySelector(".expand"); exp.onclick=()=>li.classList.toggle("open");
-  if((sub.detail||"").trim()!=="" ) {/* keep collapsed by default */}
+  const exp=li.querySelector(".expand"); exp.onclick=()=>{ const k=s.id+":"+i; if(openSubs.has(k))openSubs.delete(k);else openSubs.add(k); li.classList.toggle("open"); };
   const ta=li.querySelector(".detail textarea"); ta.oninput=()=>{sub.detail=ta.value;save();};
   li.querySelector(".copy").onclick=()=>{navigator.clipboard?.writeText(sub.detail||"");const b=li.querySelector(".copy");b.textContent="✓";setTimeout(()=>b.textContent="コピー",900);};
   li.querySelector(".delx").onclick=()=>{s.subs.splice(i,1);save();render();};
